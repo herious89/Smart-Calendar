@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Smart Calendar</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="buildNumber">Build #0.0</string>
+    <string name="title_activity_main">MainActivity</string>
+	<string name="splash_desc">Splash Screen</string>
+	
+	<color name="darkgray">#8B8B8B</color>
+</resources>
