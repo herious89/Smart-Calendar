@@ -3,10 +3,10 @@ package com.example.smartcalendar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +55,11 @@ public class GridViewAdapter extends BaseAdapter{
 		String currentMonthName = months[currentMonth];
 		int daysInMonth = daysOfMonth[currentMonth];
 		
+		for (String day : weekdays) {
+			day += "-RED";
+			items.add(day);
+		}
+		
 		// Gregorian Calendar : MINUS 1, set to FIRST OF MONTH
 		GregorianCalendar cal = new GregorianCalendar(pYear, currentMonth, 1);
 		trailingSpaces = cal.get(Calendar.DAY_OF_WEEK) - 1;
@@ -73,7 +78,7 @@ public class GridViewAdapter extends BaseAdapter{
 						months[currentMonth] + "-" + pYear);
 			}
 			else 
-				items.add(String.valueOf(i) + "-WHITE" + "-" +
+				items.add(String.valueOf(i) + "-BLACK" + "-" +
 						months[currentMonth] + "-" + pYear);
 		}
 		
@@ -88,11 +93,32 @@ public class GridViewAdapter extends BaseAdapter{
 		if (row == null) {
 			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			row = inflater.inflate(R.layout.row_grid_view, parent, false);
-		}
+		}		
+		
 		text = (TextView) row.findViewById(R.id.item_text);
 		String[] day_color = items.get(position).split("-");
 		String theDay = day_color[0];
 		text.setText(theDay);
+		if (day_color[1].equals("GREY"))
+        {
+            text.setTextColor(Color.LTGRAY);
+            row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+        }
+		if (day_color[1].equals("BLACK"))
+        {
+            text.setTextColor(Color.BLACK);
+            row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+        }
+		if (day_color[1].equals("BLUE"))
+        {
+            text.setTextColor(Color.BLUE);
+            row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+        }
+		if (day_color[1].equals("RED"))
+        {
+            text.setTextColor(Color.RED);
+            text.setTypeface(null, Typeface.BOLD);
+        }
 		row.setTag(theDay);
 		return row;
 	}

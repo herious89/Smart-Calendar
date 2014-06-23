@@ -17,9 +17,11 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class MainActivity extends Activity {
 	private Calendar calendar;
-	private GridView calendarView;
+	private GridView calendarView, weekDaysView;
 	private GridViewAdapter customGridAdapter;
-	
+	private final String[] months = {"January", "February", "March", "April", 
+									"May", "June", "July", "August", 
+									"September", "October", "November", "December"};
 
 
 	@Override
@@ -28,12 +30,13 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		calendar = Calendar.getInstance(Locale.getDefault());
 		calendarView = (GridView) this.findViewById(R.id.calendar);
-
 		
 		customGridAdapter = new GridViewAdapter(getApplicationContext(), R.layout.row_grid_view, 
 				calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
 		customGridAdapter.notifyDataSetChanged();
 		calendarView.setAdapter(customGridAdapter);
+		getActionBar().setTitle(months[calendar.get(Calendar.MONTH)] 
+				+ ", " + String.valueOf(calendar.get(Calendar.YEAR)));
 		
 	}	
 
