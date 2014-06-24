@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,15 +23,17 @@ public class GridViewAdapter extends BaseAdapter{
 	private Calendar calendar;
 	private ArrayList<String> items;
 	private Context mContext;
-	
+	private DisplayMetrics mDisplayMetrics;
 	private final String[] weekdays = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 	private final String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	
 	private int currentDayOfMonth, currentWeekDay;
 	private TextView text;
+	private int mTitleHeight, mDayHeight;
 	
-	public GridViewAdapter(Context context, int textViewID, int pMonth, int pYear) {
+	public GridViewAdapter(Context context, int textViewID, 
+			int pMonth, int pYear, DisplayMetrics metrics) {
 		month = pMonth;
 		year = pYear;
 		this.mContext = context;
@@ -38,10 +41,23 @@ public class GridViewAdapter extends BaseAdapter{
 		this.items = new ArrayList<String>();
 		this.currentDayOfMonth = calendar.get(calendar.DAY_OF_MONTH);
 		this.currentWeekDay =calendar.get(calendar.DAY_OF_WEEK);
+		mDisplayMetrics = metrics;
 		printMonth(month, year);
 	}
 	
-
+	private int getBarHeight() {
+		switch (mDisplayMetrics.densityDpi) {
+		case DisplayMetrics.DENSITY_HIGH:
+			return 48;
+		case DisplayMetrics.DENSITY_MEDIUM:
+			return 32;
+		case DisplayMetrics.DENSITY_LOW:
+			return 24;
+		default:
+			return 48;
+		}
+	}	
+	
 	private void printMonth(int pMonth, int pYear) {
 		int trailingSpaces = 0;
 		int leadSpaces = 0;
@@ -85,6 +101,9 @@ public class GridViewAdapter extends BaseAdapter{
 		for (int i = 0; i < items.size() % 7; i++) 
 			items.add(String.valueOf(i + 1) + "-GREY" + "-" + 
 					months[currentMonth + 1] + "-" +pYear);
+		mTitleHeight = 30;
+		mDayHeight = (mDisplayMetrics.heightPixels - mTitleHeight 
+				- (6 * 10) - getBarHeight())/ (6 - 1);
 	}
 	
 	@Override
@@ -102,21 +121,25 @@ public class GridViewAdapter extends BaseAdapter{
 		if (day_color[1].equals("GREY"))
         {
             text.setTextColor(Color.LTGRAY);
+            text.setHeight(mDayHeight);
             row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
         }
 		if (day_color[1].equals("BLACK"))
         {
+            text.setHeight(mDayHeight);
             text.setTextColor(Color.BLACK);
             row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
         }
 		if (day_color[1].equals("BLUE"))
         {
+            text.setHeight(mDayHeight);
             text.setTextColor(Color.BLUE);
             row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
         }
 		if (day_color[1].equals("RED"))
         {
-            text.setTextColor(Color.RED);
+            text.setHeight(mTitleHeight);
+            text.setTextColor(Color.BLACK);
             text.setTypeface(null, Typeface.BOLD);
         }
 		row.setTag(theDay);

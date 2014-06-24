@@ -16,7 +16,7 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         
         // ignore top bar for splash 
-        getActionBar().hide();
+        //getActionBar().hide();
         
         new Handler().postDelayed(new Runnable() {
  

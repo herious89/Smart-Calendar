@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
@@ -17,7 +18,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class MainActivity extends Activity {
 	private Calendar calendar;
-	private GridView calendarView, weekDaysView;
+	private GridView calendarView;
 	private GridViewAdapter customGridAdapter;
 	private final String[] months = {"January", "February", "March", "April", 
 									"May", "June", "July", "August", 
@@ -31,8 +32,12 @@ public class MainActivity extends Activity {
 		calendar = Calendar.getInstance(Locale.getDefault());
 		calendarView = (GridView) this.findViewById(R.id.calendar);
 		
+		// get display metrics
+		final DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		
 		customGridAdapter = new GridViewAdapter(getApplicationContext(), R.layout.row_grid_view, 
-				calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
+				calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR), metrics);
 		customGridAdapter.notifyDataSetChanged();
 		calendarView.setAdapter(customGridAdapter);
 		getActionBar().setTitle(months[calendar.get(Calendar.MONTH)] 
