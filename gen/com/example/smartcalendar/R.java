@@ -49,26 +49,40 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int background=0x7f020000;
-        public static final int border=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
-        public static final int splash=0x7f020003;
-        public static final int textborder=0x7f020004;
+        public static final int back_n=0x7f020000;
+        public static final int back_p=0x7f020001;
+        public static final int backbox=0x7f020002;
+        public static final int background=0x7f020003;
+        public static final int background_footer_menu=0x7f020004;
+        public static final int border=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int next_n=0x7f020007;
+        public static final int next_p=0x7f020008;
+        public static final int nextbox=0x7f020009;
+        public static final int normbox=0x7f02000a;
+        public static final int normbox_n=0x7f02000b;
+        public static final int normbox_p=0x7f02000c;
+        public static final int splash=0x7f02000d;
+        public static final int textborder=0x7f02000e;
     }
     public static final class id {
-        public static final int Splash=0x7f090002;
-        public static final int action_settings=0x7f090005;
-        public static final int app_version=0x7f090003;
-        public static final int calendar=0x7f090001;
-        public static final int container=0x7f090000;
-        public static final int item_text=0x7f090004;
+        public static final int Splash=0x7f090005;
+        public static final int action_settings=0x7f090008;
+        public static final int app_version=0x7f090006;
+        public static final int btnNext=0x7f090000;
+        public static final int btnPrev=0x7f090002;
+        public static final int calendar=0x7f090004;
+        public static final int container=0x7f090003;
+        public static final int item_text=0x7f090007;
+        public static final int textViewGeneral=0x7f090001;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
-        public static final int activity_splash=0x7f030001;
-        public static final int fragment_main=0x7f030002;
-        public static final int fragment_splash=0x7f030003;
-        public static final int row_grid_view=0x7f030004;
+        public static final int actionbar_top_main=0x7f030000;
+        public static final int activity_main=0x7f030001;
+        public static final int activity_splash=0x7f030002;
+        public static final int fragment_main=0x7f030003;
+        public static final int fragment_splash=0x7f030004;
+        public static final int row_grid_view=0x7f030005;
     }
     public static final class menu {
         public static final int main=0x7f080000;

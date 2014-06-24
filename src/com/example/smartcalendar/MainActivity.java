@@ -4,19 +4,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 
 
 public class MainActivity extends Activity {
+	private Button btnNext, btnPrev;
 	private Calendar calendar;
 	private GridView calendarView;
 	private GridViewAdapter customGridAdapter;
@@ -29,43 +33,57 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// Get the calendar using default timezone  and locale
 		calendar = Calendar.getInstance(Locale.getDefault());
+		// Get the grid view 
 		calendarView = (GridView) this.findViewById(R.id.calendar);
 		
 		// get display metrics
 		final DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		
+		// Create and set adapter for grid view 
 		customGridAdapter = new GridViewAdapter(getApplicationContext(), R.layout.row_grid_view, 
 				calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR), metrics);
 		customGridAdapter.notifyDataSetChanged();
 		calendarView.setAdapter(customGridAdapter);
-		getActionBar().setTitle(months[calendar.get(Calendar.MONTH)] 
+		
+		// Set the custom action bar
+		ActionBar actionBarTop = getActionBar();
+		actionBarTop.setCustomView(R.layout.actionbar_top_main);
+		actionBarTop.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		
+		// Set the title of the action bar to the current date
+		TextView actionBarText = (TextView) this.findViewById(R.id.textViewGeneral);
+		actionBarText.setText(months[calendar.get(Calendar.MONTH)] 
 				+ ", " + String.valueOf(calendar.get(Calendar.YEAR)));
 		
+		// Set the button
+		btnNext = (Button) this.findViewById(R.id.btnNext);
+		btnPrev = (Button) this.findViewById(R.id.btnPrev);
+		
+		btnNext.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "Next is clicked", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		btnPrev.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "Prev is clicked", Toast.LENGTH_SHORT).show();
+			}
+		});
 	}	
 
 	
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
 
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 
 
 }

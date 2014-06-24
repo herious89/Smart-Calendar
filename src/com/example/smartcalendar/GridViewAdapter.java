@@ -72,7 +72,7 @@ public class GridViewAdapter extends BaseAdapter{
 		int daysInMonth = daysOfMonth[currentMonth];
 		
 		for (String day : weekdays) {
-			day += "-RED";
+			day += "-WEEKDAYS";
 			items.add(day);
 		}
 		
@@ -90,20 +90,20 @@ public class GridViewAdapter extends BaseAdapter{
 		for (int i = 1; i <= daysInMonth; i++) {
 			Log.d(currentMonthName, String.valueOf(i) + " " + months[currentMonth] + " " + pYear);
 			if (i == this.currentDayOfMonth) {
-				items.add(String.valueOf(i) + "-BLUE" + "-" +
+				items.add(String.valueOf(i) + "-CURRENT" + "-" +
 						months[currentMonth] + "-" + pYear);
 			}
 			else 
-				items.add(String.valueOf(i) + "-BLACK" + "-" +
+				items.add(String.valueOf(i) + "-DAYS" + "-" +
 						months[currentMonth] + "-" + pYear);
 		}
 		
 		for (int i = 0; i < items.size() % 7; i++) 
-			items.add(String.valueOf(i + 1) + "-GREY" + "-" + 
+			items.add(String.valueOf(i + 1) + "-NEXT" + "-" + 
 					months[currentMonth + 1] + "-" +pYear);
-		mTitleHeight = 30;
+		mTitleHeight = 40;
 		mDayHeight = (mDisplayMetrics.heightPixels - mTitleHeight 
-				- (6 * 10) - getBarHeight())/ (6 - 1);
+				- (6 * 17) - getBarHeight())/ (6 - 1);
 	}
 	
 	@Override
@@ -118,25 +118,25 @@ public class GridViewAdapter extends BaseAdapter{
 		String[] day_color = items.get(position).split("-");
 		String theDay = day_color[0];
 		text.setText(theDay);
-		if (day_color[1].equals("GREY"))
+		if (day_color[1].equals("NEXT"))
         {
             text.setTextColor(Color.LTGRAY);
             text.setHeight(mDayHeight);
             row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
         }
-		if (day_color[1].equals("BLACK"))
+		if (day_color[1].equals("DAYS"))
         {
             text.setHeight(mDayHeight);
             text.setTextColor(Color.BLACK);
             row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
         }
-		if (day_color[1].equals("BLUE"))
+		if (day_color[1].equals("CURRENT"))
         {
             text.setHeight(mDayHeight);
             text.setTextColor(Color.BLUE);
             row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
         }
-		if (day_color[1].equals("RED"))
+		if (day_color[1].equals("WEEKDAYS"))
         {
             text.setHeight(mTitleHeight);
             text.setTextColor(Color.BLACK);
