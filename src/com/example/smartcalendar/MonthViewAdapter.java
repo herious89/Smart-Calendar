@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 
 
-public class GridViewAdapter extends BaseAdapter{
+public class MonthViewAdapter extends BaseAdapter{
 	
 	private int month, year;
 	private Calendar calendar;
@@ -32,7 +32,7 @@ public class GridViewAdapter extends BaseAdapter{
 	private TextView text;
 	private int mTitleHeight, mDayHeight;
 	
-	public GridViewAdapter(Context context, int textViewID, 
+	public MonthViewAdapter(Context context, int textViewID, 
 			int pMonth, int pYear, DisplayMetrics metrics) {
 		month = pMonth;
 		year = pYear;

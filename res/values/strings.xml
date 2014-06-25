@@ -7,9 +7,9 @@
     <string name="action_settings">Settings</string>
     <string name="buildNumber">Build #0.2</string>
     <string name="title_activity_main">MainActivity</string>
-	<string name="splash_desc">Splash Screen</string>
-	
-	<!-- Colors -->
+    <string name="splash_desc">Splash Screen</string>
+
+    <!-- Colors -->
     <color name="white">#F2F2F2</color>
     <color name="black">#333333</color>
     <color name="purewhite">#FFFFFF</color>
@@ -33,5 +33,7 @@
     <color name="Plum">#DDA0DD</color>
     <color name="Khaki">#F0E68C</color>
     <color name="Mint">#C5E3BF</color>
-	
+
+    <string name="title_activity_display_year">DisplayYearActivity</string>
+
 </resources>

@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -19,11 +20,13 @@ import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 
 
-public class MainActivity extends Activity {
+public class DisplayMonthActivity extends Activity {
+	
+	public final static String CURRENT_DISPLAY_YEAR = "";
 	private Button btnNext, btnPrev;
 	private Calendar calendar;
 	private GridView calendarView;
-	private GridViewAdapter customGridAdapter;
+	private MonthViewAdapter customGridAdapter;
 	private final String[] months = {"January", "February", "March", "April", 
 									"May", "June", "July", "August", 
 									"September", "October", "November", "December"};
@@ -35,7 +38,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_display_month);
 		
 		// Get the calendar using default timezone  and locale
 		calendar = Calendar.getInstance(Locale.getDefault());
@@ -50,25 +53,25 @@ public class MainActivity extends Activity {
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		
 		// Create and set adapter for grid view 
-		customGridAdapter = new GridViewAdapter(getApplicationContext(), R.layout.row_grid_view, 
+		customGridAdapter = new MonthViewAdapter(getApplicationContext(), R.layout.row_grid_view, 
 				calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR), metrics);
 		customGridAdapter.notifyDataSetChanged();
 		calendarView.setAdapter(customGridAdapter);
 		
 		// Set the custom action bar
 		ActionBar actionBarTop = getActionBar();
-		actionBarTop.setCustomView(R.layout.actionbar_top_main);
+		actionBarTop.setCustomView(R.layout.actionbar_top_month);
 		actionBarTop.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		
 		// Set the title of the action bar to the current date
-		actionBarText = (TextView) this.findViewById(R.id.textViewGeneral);
+		actionBarText = (TextView) this.findViewById(R.id.titleDate);
 		actionBarText.setText(months[mCurrentDisplay] + ", " + String.valueOf(yCurrentDisplay));
 		
 		// Set the button
-		btnNext = (Button) this.findViewById(R.id.btnNext);
-		btnPrev = (Button) this.findViewById(R.id.btnPrev);
+		btnNext = (Button) this.findViewById(R.id.btnNextMonth);
+		btnPrev = (Button) this.findViewById(R.id.btnPrevMonth);
 		
-		// Create click event for each button
+		// Create click event for button next
 		btnNext.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -86,6 +89,7 @@ public class MainActivity extends Activity {
 			}
 		});
 		
+		// Create click event for button prev
 		btnPrev.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -102,11 +106,24 @@ public class MainActivity extends Activity {
 				setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
 			}
 		});
+		
+		// Create click event for action bar's title
+		actionBarText.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "Title is clicked", Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(getApplicationContext(), DisplayYearActivity.class);
+				intent.putExtra(CURRENT_DISPLAY_YEAR, String.valueOf(yCurrentDisplay));
+				startActivity(intent);
+			}
+		});
 	}	
 	
 	private void setGridCellAdapterToDate(int month, int year)
     {
-		customGridAdapter = new GridViewAdapter(getApplicationContext(), R.layout.row_grid_view, 
+		customGridAdapter = new MonthViewAdapter(getApplicationContext(), R.layout.row_grid_view, 
 				month + 1, year, metrics);
 		calendar.set(year, month, calendar.get(Calendar.DAY_OF_MONTH));
 		customGridAdapter.notifyDataSetChanged();
