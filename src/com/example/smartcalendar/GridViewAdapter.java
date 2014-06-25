@@ -60,12 +60,9 @@ public class GridViewAdapter extends BaseAdapter{
 	
 	private void printMonth(int pMonth, int pYear) {
 		int trailingSpaces = 0;
-		int leadSpaces = 0;
 		int daysInPrevMonth = 0;
 		int prevMonth = 0;
-		int prevYear = 0;
 		int nextMonth = 0;
-		int nextYear = 0;
 		
 		int currentMonth = pMonth - 1;
 		String currentMonthName = months[currentMonth];
@@ -80,30 +77,58 @@ public class GridViewAdapter extends BaseAdapter{
 		GregorianCalendar cal = new GregorianCalendar(pYear, currentMonth, 1);
 		trailingSpaces = cal.get(Calendar.DAY_OF_WEEK) - 1;
 		
+		// Check for current previous month and next month
+		if (currentMonth == 11)
+        {
+            prevMonth = currentMonth - 1;
+            nextMonth = 0;
+            daysInPrevMonth = daysOfMonth[prevMonth];
+        }
+		else if (currentMonth == 0)
+        {
+            prevMonth = 11;
+            nextMonth = 1;
+            daysInPrevMonth = daysOfMonth[prevMonth];
+        }
+		else
+        {
+            prevMonth = currentMonth - 1;
+            nextMonth = currentMonth + 1;
+            daysInPrevMonth = daysOfMonth[prevMonth];
+        }
+		
+		// Check for leap year
 		if (cal.isLeapYear(Calendar.YEAR) && pMonth == 1) 
 			daysInMonth++;
+		
+		// Calculate trailing spaces 
 		for (int i = 0; i < trailingSpaces; i++) {
-			items.add(String.valueOf(31 - trailingSpaces + 1 + i) + "-GREY"
-					+ "-" + months[currentMonth - 1] + "-" + 2013);
+			items.add(String.valueOf(daysInPrevMonth - trailingSpaces + 1 + i) + "-PREV"
+					+ "-" + months[prevMonth] + "-" + pYear);
 		}
 		
+		// Calculate number of days to display in the current month
 		for (int i = 1; i <= daysInMonth; i++) {
 			Log.d(currentMonthName, String.valueOf(i) + " " + months[currentMonth] + " " + pYear);
+			// Check for the current day of the month
 			if (i == this.currentDayOfMonth) {
 				items.add(String.valueOf(i) + "-CURRENT" + "-" +
 						months[currentMonth] + "-" + pYear);
 			}
-			else 
+			else  
 				items.add(String.valueOf(i) + "-DAYS" + "-" +
 						months[currentMonth] + "-" + pYear);
 		}
 		
+		// Calculate number of days to display for the next month
 		for (int i = 0; i < items.size() % 7; i++) 
 			items.add(String.valueOf(i + 1) + "-NEXT" + "-" + 
-					months[currentMonth + 1] + "-" +pYear);
+					months[nextMonth] + "-" +pYear);
+		
+		// Set the height for each cell of grid view
 		mTitleHeight = 40;
 		mDayHeight = (mDisplayMetrics.heightPixels - mTitleHeight 
-				- (6 * 17) - getBarHeight())/ (6 - 1);
+				- (6 * 10) - getBarHeight())/ (6 - 1);
 	}
 	
 	@Override
@@ -118,7 +143,7 @@ public class GridViewAdapter extends BaseAdapter{
 		String[] day_color = items.get(position).split("-");
 		String theDay = day_color[0];
 		text.setText(theDay);
-		if (day_color[1].equals("NEXT"))
+		if (day_color[1].equals("NEXT") || day_color[1].equals("PREV"))
         {
             text.setTextColor(Color.LTGRAY);
             text.setHeight(mDayHeight);

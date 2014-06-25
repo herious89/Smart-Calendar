@@ -27,6 +27,9 @@ public class MainActivity extends Activity {
 	private final String[] months = {"January", "February", "March", "April", 
 									"May", "June", "July", "August", 
 									"September", "October", "November", "December"};
+	private int mCurrentDisplay, yCurrentDisplay;
+	private DisplayMetrics metrics;
+	private TextView actionBarText;
 
 
 	@Override
@@ -38,9 +41,12 @@ public class MainActivity extends Activity {
 		calendar = Calendar.getInstance(Locale.getDefault());
 		// Get the grid view 
 		calendarView = (GridView) this.findViewById(R.id.calendar);
+		// Get the current month and year
+		mCurrentDisplay = calendar.get(Calendar.MONTH);
+		yCurrentDisplay = calendar.get(Calendar.YEAR);
 		
 		// get display metrics
-		final DisplayMetrics metrics = new DisplayMetrics();
+		metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		
 		// Create and set adapter for grid view 
@@ -55,20 +61,28 @@ public class MainActivity extends Activity {
 		actionBarTop.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		
 		// Set the title of the action bar to the current date
-		TextView actionBarText = (TextView) this.findViewById(R.id.textViewGeneral);
-		actionBarText.setText(months[calendar.get(Calendar.MONTH)] 
-				+ ", " + String.valueOf(calendar.get(Calendar.YEAR)));
+		actionBarText = (TextView) this.findViewById(R.id.textViewGeneral);
+		actionBarText.setText(months[mCurrentDisplay] + ", " + String.valueOf(yCurrentDisplay));
 		
 		// Set the button
 		btnNext = (Button) this.findViewById(R.id.btnNext);
 		btnPrev = (Button) this.findViewById(R.id.btnPrev);
 		
+		// Create click event for each button
 		btnNext.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "Next is clicked", Toast.LENGTH_SHORT).show();
+				// Check for correct date display
+				if(mCurrentDisplay == 11) {
+					mCurrentDisplay = 0;
+					yCurrentDisplay++;
+				}
+				else
+					mCurrentDisplay++;
+				setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
 			}
 		});
 		
@@ -78,12 +92,27 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "Prev is clicked", Toast.LENGTH_SHORT).show();
+				// Check for correct date display
+				if(mCurrentDisplay == 0) {
+					mCurrentDisplay = 11;
+					yCurrentDisplay--;
+				}
+				else 
+					mCurrentDisplay--;
+				setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
 			}
 		});
 	}	
-
 	
-
+	private void setGridCellAdapterToDate(int month, int year)
+    {
+		customGridAdapter = new GridViewAdapter(getApplicationContext(), R.layout.row_grid_view, 
+				month + 1, year, metrics);
+		calendar.set(year, month, calendar.get(Calendar.DAY_OF_MONTH));
+		customGridAdapter.notifyDataSetChanged();
+		calendarView.setAdapter(customGridAdapter);
+		actionBarText.setText(months[month] + ", " + String.valueOf(year));
+    }
 
 
 }
