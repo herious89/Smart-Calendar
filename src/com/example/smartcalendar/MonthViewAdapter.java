@@ -136,10 +136,10 @@ public class MonthViewAdapter extends BaseAdapter{
 		View row = convertView;
 		if (row == null) {
 			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			row = inflater.inflate(R.layout.row_grid_view, parent, false);
+			row = inflater.inflate(R.layout.day_grid_cell, parent, false);
 		}		
 		
-		text = (TextView) row.findViewById(R.id.item_text);
+		text = (TextView) row.findViewById(R.id.textDate);
 		String[] day_color = items.get(position).split("-");
 		String theDay = day_color[0];
 		text.setText(theDay);

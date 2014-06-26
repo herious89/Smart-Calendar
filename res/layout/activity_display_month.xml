@@ -6,7 +6,7 @@
     android:id="@+id/container">
 
     <GridView
-        android:id="@+id/calendar"
+        android:id="@+id/monthView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"

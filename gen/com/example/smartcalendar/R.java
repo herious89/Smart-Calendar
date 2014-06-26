@@ -66,18 +66,20 @@ public final class R {
         public static final int textborder=0x7f02000e;
     }
     public static final class id {
-        public static final int Splash=0x7f090008;
-        public static final int action_settings=0x7f09000b;
-        public static final int app_version=0x7f090009;
+        public static final int Splash=0x7f090009;
+        public static final int action_settings=0x7f09000d;
+        public static final int app_version=0x7f09000a;
         public static final int btnNextMonth=0x7f090000;
         public static final int btnNextYear=0x7f090003;
         public static final int btnPrevMonth=0x7f090002;
         public static final int btnPrevYear=0x7f090005;
-        public static final int calendar=0x7f090007;
         public static final int container=0x7f090006;
-        public static final int item_text=0x7f09000a;
+        public static final int monthName=0x7f09000c;
+        public static final int monthView=0x7f090007;
+        public static final int textDate=0x7f09000b;
         public static final int titleDate=0x7f090001;
         public static final int titleYear=0x7f090004;
+        public static final int yearView=0x7f090008;
     }
     public static final class layout {
         public static final int actionbar_top_month=0x7f030000;
@@ -85,10 +87,11 @@ public final class R {
         public static final int activity_display_month=0x7f030002;
         public static final int activity_display_year=0x7f030003;
         public static final int activity_splash=0x7f030004;
-        public static final int fragment_display_year=0x7f030005;
-        public static final int fragment_main=0x7f030006;
-        public static final int fragment_splash=0x7f030007;
-        public static final int row_grid_view=0x7f030008;
+        public static final int day_grid_cell=0x7f030005;
+        public static final int fragment_display_year=0x7f030006;
+        public static final int fragment_main=0x7f030007;
+        public static final int fragment_splash=0x7f030008;
+        public static final int month_grid_cell=0x7f030009;
     }
     public static final class menu {
         public static final int display_year=0x7f080000;

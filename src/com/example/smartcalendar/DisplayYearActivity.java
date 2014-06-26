@@ -10,17 +10,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.os.Build;
 
 public class DisplayYearActivity extends Activity {
 
 	private TextView actionBarText;
+	private GridView yearView, monthView;
+	private YearViewAdapter yearGridAdapter;
+	private MonthViewAdapter monthGridAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_year);
+
 		
 		// Set custom action bar
 		ActionBar actionBarTop = getActionBar();
@@ -34,6 +39,13 @@ public class DisplayYearActivity extends Activity {
 		// Set the title of the action bar to the current year
 		actionBarText = (TextView) this.findViewById(R.id.titleYear);
 		actionBarText.setText(yCurrentDisplay);
+		
+		// Set the grid view
+		yearView = (GridView) this.findViewById(R.id.yearView);
+		yearGridAdapter = new YearViewAdapter(getApplicationContext(), R.layout.month_grid_cell,
+						Integer.parseInt(yCurrentDisplay));
+		yearGridAdapter.notifyDataSetChanged();
+		yearView.setAdapter(yearGridAdapter);
 	}
 
 	@Override
