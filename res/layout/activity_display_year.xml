@@ -3,16 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/container">
-
+    android:id="@+id/container"
+    android:background="@color/black">
+    
     <GridView
         android:id="@+id/yearView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:numColumns="3">
+        android:numColumns="2"
+        android:isScrollContainer="false"
+        android:background="@color/black">
     </GridView>
+    
     
 </RelativeLayout>

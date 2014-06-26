@@ -24,16 +24,17 @@ public class MonthViewAdapter extends BaseAdapter{
 	private ArrayList<String> items;
 	private Context mContext;
 	private DisplayMetrics mDisplayMetrics;
-	private final String[] weekdays = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+	private String[] weekdays = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 	private final String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	
 	private int currentDayOfMonth, currentWeekDay;
 	private TextView text;
 	private int mTitleHeight, mDayHeight;
+	private boolean viewFlag = false;
 	
 	public MonthViewAdapter(Context context, int textViewID, 
-			int pMonth, int pYear, DisplayMetrics metrics) {
+			int pMonth, int pYear, DisplayMetrics metrics, boolean flaq) {
 		month = pMonth;
 		year = pYear;
 		this.mContext = context;
@@ -42,6 +43,9 @@ public class MonthViewAdapter extends BaseAdapter{
 		this.currentDayOfMonth = calendar.get(calendar.DAY_OF_MONTH);
 		this.currentWeekDay =calendar.get(calendar.DAY_OF_WEEK);
 		mDisplayMetrics = metrics;
+		this.viewFlag = flaq;
+		if (!this.viewFlag)
+			weekdays = new String[] {"S", "M", "T", "W", "Th", "F", "S"};
 		printMonth(month, year);
 	}
 	
@@ -62,10 +66,8 @@ public class MonthViewAdapter extends BaseAdapter{
 		int trailingSpaces = 0;
 		int daysInPrevMonth = 0;
 		int prevMonth = 0;
-		int nextMonth = 0;
-		
+		int nextMonth = 0;		
 		int currentMonth = pMonth - 1;
-		String currentMonthName = months[currentMonth];
 		int daysInMonth = daysOfMonth[currentMonth];
 		
 		for (String day : weekdays) {
@@ -107,11 +109,12 @@ public class MonthViewAdapter extends BaseAdapter{
 					+ "-" + months[prevMonth] + "-" + pYear);
 		}
 		
+		
 		// Calculate number of days to display in the current month
 		for (int i = 1; i <= daysInMonth; i++) {
-			Log.d(currentMonthName, String.valueOf(i) + " " + months[currentMonth] + " " + pYear);
 			// Check for the current day of the month
-			if (i == this.currentDayOfMonth) {
+			if (i == this.currentDayOfMonth && pYear == calendar.get(Calendar.YEAR)
+					&& currentMonth == calendar.get(Calendar.MONTH)) {
 				items.add(String.valueOf(i) + "-CURRENT" + "-" +
 						months[currentMonth] + "-" + pYear);
 			}
@@ -138,34 +141,49 @@ public class MonthViewAdapter extends BaseAdapter{
 			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			row = inflater.inflate(R.layout.day_grid_cell, parent, false);
 		}		
-		
+		else
+			row = (View) convertView;
 		text = (TextView) row.findViewById(R.id.textDate);
 		String[] day_color = items.get(position).split("-");
+		Log.d("Here", "Position *****" + position);
 		String theDay = day_color[0];
-		text.setText(theDay);
+//		text.setText(theDay);
 		if (day_color[1].equals("NEXT") || day_color[1].equals("PREV"))
         {
             text.setTextColor(Color.LTGRAY);
-            text.setHeight(mDayHeight);
-            row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+            text.setText(theDay);
+            if (this.viewFlag) {
+            	text.setHeight(mDayHeight);
+            	row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+            }
         }
 		if (day_color[1].equals("DAYS"))
         {
-            text.setHeight(mDayHeight);
             text.setTextColor(Color.BLACK);
-            row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+            text.setText(theDay);
+            if (this.viewFlag) {
+            	text.setHeight(mDayHeight);
+            	row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+            }
         }
 		if (day_color[1].equals("CURRENT"))
         {
-            text.setHeight(mDayHeight);
             text.setTextColor(Color.BLUE);
-            row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+            text.setText(theDay);
+            if (this.viewFlag) {
+            	text.setHeight(mDayHeight);
+            	row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+            }
         }
 		if (day_color[1].equals("WEEKDAYS"))
         {
-            text.setHeight(mTitleHeight);
+        	text.setText(theDay);
+            if (this.viewFlag) {
+            	text.setHeight(mTitleHeight);
+            }
             text.setTextColor(Color.BLACK);
             text.setTypeface(null, Typeface.BOLD);
+            text.setPadding(0, 0, 0, 10);
         }
 		row.setTag(theDay);
 		return row;

@@ -49,7 +49,7 @@ public class DisplayMonthActivity extends Activity {
 		
 		// Create and set adapter for grid view 
 		customGridAdapter = new MonthViewAdapter(getApplicationContext(), R.layout.day_grid_cell, 
-				calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR), metrics);
+				calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR), metrics, true);
 		customGridAdapter.notifyDataSetChanged();
 		monthView.setAdapter(customGridAdapter);
 		
@@ -119,7 +119,7 @@ public class DisplayMonthActivity extends Activity {
 	private void setGridCellAdapterToDate(int month, int year)
     {
 		customGridAdapter = new MonthViewAdapter(getApplicationContext(), R.layout.day_grid_cell, 
-				month + 1, year, metrics);
+				month + 1, year, metrics, true);
 		calendar.set(year, month, calendar.get(Calendar.DAY_OF_MONTH));
 		customGridAdapter.notifyDataSetChanged();
 		monthView.setAdapter(customGridAdapter);
