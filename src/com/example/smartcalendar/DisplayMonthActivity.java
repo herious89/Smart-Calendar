@@ -18,7 +18,7 @@ import android.view.View;
 public class DisplayMonthActivity extends Activity {
 	
 	public final static String CURRENT_DISPLAY_YEAR = "";
-	private Button btnNext, btnPrev;
+	private Button btnNextMonth, btnPrevMonth;
 	private Calendar calendar;
 	private GridView monthView;
 	private MonthViewAdapter customGridAdapter;
@@ -62,17 +62,16 @@ public class DisplayMonthActivity extends Activity {
 		actionBarText = (TextView) this.findViewById(R.id.titleDate);
 		actionBarText.setText(months[mCurrentDisplay] + ", " + String.valueOf(yCurrentDisplay));
 		
-		// Set the button
-		btnNext = (Button) this.findViewById(R.id.btnNextMonth);
-		btnPrev = (Button) this.findViewById(R.id.btnPrevMonth);
+		// Set the buttons
+		btnNextMonth = (Button) this.findViewById(R.id.btnNextMonth);
+		btnPrevMonth = (Button) this.findViewById(R.id.btnPrevMonth);
 		
 		// Create click event for button next
-		btnNext.setOnClickListener(new View.OnClickListener() {
+		btnNextMonth.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), "Next is clicked", Toast.LENGTH_SHORT).show();
 				// Check for correct date display
 				if(mCurrentDisplay == 11) {
 					mCurrentDisplay = 0;
@@ -85,12 +84,11 @@ public class DisplayMonthActivity extends Activity {
 		});
 		
 		// Create click event for button prev
-		btnPrev.setOnClickListener(new View.OnClickListener() {
+		btnPrevMonth.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), "Prev is clicked", Toast.LENGTH_SHORT).show();
 				// Check for correct date display
 				if(mCurrentDisplay == 0) {
 					mCurrentDisplay = 11;
@@ -108,9 +106,8 @@ public class DisplayMonthActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), "Title is clicked", Toast.LENGTH_SHORT).show();
 				Intent intent = new Intent(getApplicationContext(), DisplayYearActivity.class);
-				intent.putExtra(CURRENT_DISPLAY_YEAR, String.valueOf(yCurrentDisplay));
+				intent.putExtra(CURRENT_DISPLAY_YEAR, yCurrentDisplay);
 				startActivity(intent);
 			}
 		});

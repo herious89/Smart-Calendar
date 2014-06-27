@@ -182,6 +182,7 @@ public class MonthViewAdapter extends BaseAdapter{
             	text.setHeight(mTitleHeight);
             }
             text.setTextColor(Color.BLACK);
+            text.setBackgroundColor(Color.YELLOW);
             text.setTypeface(null, Typeface.BOLD);
             text.setPadding(0, 0, 0, 10);
         }

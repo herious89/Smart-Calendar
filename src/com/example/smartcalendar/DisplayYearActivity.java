@@ -1,5 +1,7 @@
 package com.example.smartcalendar;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -11,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.os.Build;
@@ -18,20 +21,16 @@ import android.os.Build;
 public class DisplayYearActivity extends Activity {
 
 	private TextView actionBarText;
-//	private GridView janView, febView, marView, aprView, mayView, junView, julView,
-//	augView, sepView, octView, novView, decView;
-//	private MonthViewAdapter customGridAdapter;
 	private GridView yearView;
-//	private CustomGridView yearView;
 	private YearViewAdapter yearGridAdapter;
+	private Button btnNextYear, btnPrevYear;
+	private int yCurrentDisplay;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_year);
-		
-		DisplayMetrics metrics = new DisplayMetrics();
-		
+				
 		// Set custom action bar
 		ActionBar actionBarTop = getActionBar();
 		actionBarTop.setCustomView(R.layout.actionbar_top_year);
@@ -39,38 +38,53 @@ public class DisplayYearActivity extends Activity {
 	
 		// Get the current display year from intent
 		Intent intent = getIntent();
-		String yCurrentDisplay = intent.getStringExtra(DisplayMonthActivity.CURRENT_DISPLAY_YEAR);
+		yCurrentDisplay = intent.getIntExtra(DisplayMonthActivity.CURRENT_DISPLAY_YEAR, 0);
 	
 		// Set the title of the action bar to the current year
 		actionBarText = (TextView) this.findViewById(R.id.titleYear);
-		actionBarText.setText(yCurrentDisplay);
+		actionBarText.setText(String.valueOf(yCurrentDisplay));
 		
 		// Set the grid view
 		yearView = (GridView) this.findViewById(R.id.yearView);
-//		yearView = (CustomGridView) this.findViewById(R.id.yearView);
 		yearGridAdapter = new YearViewAdapter(getApplicationContext(), R.layout.month_grid_cell,
-						Integer.parseInt(yCurrentDisplay));
+						yCurrentDisplay);
 		yearGridAdapter.notifyDataSetChanged();
 		yearView.setAdapter(yearGridAdapter);
 		
-//		janView = (GridView) this.findViewById(R.id.januaryView);
-//		customGridAdapter = new MonthViewAdapter(getApplicationContext(), R.layout.day_grid_cell,
-//				1, Integer.parseInt(yCurrentDisplay), metrics, false);
-//		customGridAdapter.notifyDataSetChanged();
-//		janView.setAdapter(customGridAdapter);
-//		
-//		febView = (GridView) this.findViewById(R.id.februaryView);
-//		customGridAdapter = new MonthViewAdapter(getApplicationContext(), R.layout.day_grid_cell,
-//				1, Integer.parseInt(yCurrentDisplay), metrics, false);
-//		customGridAdapter.notifyDataSetChanged();
-//		febView.setAdapter(customGridAdapter);
-//		
-//		marView = (GridView) this.findViewById(R.id.marchView);
-//		customGridAdapter = new MonthViewAdapter(getApplicationContext(), R.layout.day_grid_cell,
-//				1, Integer.parseInt(yCurrentDisplay), metrics, false);
-//		customGridAdapter.notifyDataSetChanged();
-//		marView.setAdapter(customGridAdapter);
+		// Set the buttons
+		btnNextYear = (Button) this.findViewById(R.id.btnNextYear);
+		btnPrevYear = (Button) this.findViewById(R.id.btnPrevYear);
+		
+		btnNextYear.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				yCurrentDisplay++;
+				setGridCellAdapterToDate(yCurrentDisplay);
+			}
+		});
+		
+		btnPrevYear.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				yCurrentDisplay--;
+				setGridCellAdapterToDate(yCurrentDisplay);
+			}
+		});
+		
 	}
+	
+	private void setGridCellAdapterToDate(int year)
+    {
+		yearGridAdapter = new YearViewAdapter(getApplicationContext(), R.layout.month_grid_cell, 
+				year);
+		yearGridAdapter.notifyDataSetChanged();
+		yearView.setAdapter(yearGridAdapter);
+		actionBarText.setText(String.valueOf(year));
+    }
 
 
 }
