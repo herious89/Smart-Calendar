@@ -8,10 +8,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.view.View;
 
 
@@ -28,12 +28,14 @@ public class DisplayMonthActivity extends Activity {
 	private int mCurrentDisplay, yCurrentDisplay;
 	private DisplayMetrics metrics;
 	private TextView actionBarText;
+	private boolean firstTime = true;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_month);
+				
 		
 		// Get the calendar using default timezone  and locale
 		calendar = Calendar.getInstance(Locale.getDefault());
@@ -43,13 +45,32 @@ public class DisplayMonthActivity extends Activity {
 		mCurrentDisplay = calendar.get(Calendar.MONTH);
 		yCurrentDisplay = calendar.get(Calendar.YEAR);
 		
+		ApplicationData data = (ApplicationData) this.getApplicationContext();
+		if (data.getFlaq()) {
+			mCurrentDisplay = data.getMonth();
+			yCurrentDisplay = data.getYear();
+		}
+		
 		// get display metrics
 		metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		
+		Log.d("Here", "True or false:********" + firstTime);
+		if (!firstTime) {
+			Intent intent = getIntent();
+			mCurrentDisplay = intent.getIntExtra(YearViewAdapter.SELECTED_MONTH, 
+					calendar.get(Calendar.MONTH));
+			yCurrentDisplay = intent.getIntExtra(YearViewAdapter.SELECTED_YEAR,
+					calendar.get(Calendar.YEAR));
+			Log.d("Here", "******" + mCurrentDisplay + yCurrentDisplay);
+			setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
+		} 
+
+		Log.d("Here", "True or false:********" + firstTime);
+				
 		// Create and set adapter for grid view 
 		customGridAdapter = new MonthViewAdapter(getApplicationContext(), R.layout.day_grid_cell, 
-				calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR), metrics, true);
+				mCurrentDisplay + 1, yCurrentDisplay, metrics, true);
 		customGridAdapter.notifyDataSetChanged();
 		monthView.setAdapter(customGridAdapter);
 		
@@ -112,6 +133,7 @@ public class DisplayMonthActivity extends Activity {
 			}
 		});
 	}	
+	
 	
 	private void setGridCellAdapterToDate(int month, int year)
     {

@@ -1,18 +1,11 @@
 package com.example.smartcalendar;
 
-import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -74,7 +67,6 @@ public class DisplayYearActivity extends Activity {
 				setGridCellAdapterToDate(yCurrentDisplay);
 			}
 		});
-		
 	}
 	
 	private void setGridCellAdapterToDate(int year)

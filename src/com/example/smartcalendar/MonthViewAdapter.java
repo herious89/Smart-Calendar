@@ -145,7 +145,6 @@ public class MonthViewAdapter extends BaseAdapter{
 			row = (View) convertView;
 		text = (TextView) row.findViewById(R.id.textDate);
 		String[] day_color = items.get(position).split("-");
-		Log.d("Here", "Position *****" + position);
 		String theDay = day_color[0];
 //		text.setText(theDay);
 		if (day_color[1].equals("NEXT") || day_color[1].equals("PREV"))

@@ -25,6 +25,7 @@ public final class R {
         public static final int lightblue2=0x7f060009;
         public static final int listViewBg=0x7f06000d;
         public static final int purewhite=0x7f060002;
+        public static final int purple=0x7f060017;
         public static final int red=0x7f060006;
         public static final int sendDarkColor=0x7f060010;
         public static final int sendLightColor=0x7f06000e;
