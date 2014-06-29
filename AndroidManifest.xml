@@ -26,11 +26,13 @@
         </activity>
         <activity
             android:name="com.example.smartcalendar.DisplayMonthActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main" 
+            android:uiOptions="splitActionBarWhenNarrow">
         </activity>
         <activity
             android:name="com.example.smartcalendar.DisplayYearActivity"
-            android:label="@string/title_activity_display_year" >
+            android:label="@string/title_activity_display_year" 
+            android:uiOptions="splitActionBarWhenNarrow">
         </activity>
     </application>
 

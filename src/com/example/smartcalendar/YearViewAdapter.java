@@ -55,15 +55,24 @@ public class YearViewAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		View row = convertView;
+		YearHolder holder = null;
 		if (row == null) {
 			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			row = inflater.inflate(R.layout.month_grid_cell, parent, false);
+			holder = new YearHolder();
+			holder.month = (TextView) row.findViewById(R.id.monthName);
+			holder.monthView = (GridView) row.findViewById(R.id.yearlyMonthView);
+			holder.monthAdapter = new MonthViewAdapter(mContext, R.layout.day_grid_cell, 
+					position + 1, this.mYear, metrics, false);
+			row.setTag(holder);
 		}
-		monthName = (TextView) row.findViewById(R.id.monthName);
-		monthName.setText(months[position]);
-		monthName.setClickable(true);
+		else 
+			holder = (YearHolder) row.getTag();
+		
+		holder.month.setText(months[position]);
+		holder.month.setClickable(true);
 		final int month = position;
-		monthName.setOnClickListener(new View.OnClickListener() {
+		holder.month.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -78,13 +87,17 @@ public class YearViewAdapter extends BaseAdapter{
 				mContext.startActivity(intent);
 			}
 		});
-		yearlyMonthView = (GridView) row.findViewById(R.id.yearlyMonthView);
-		customGridAdapter = new MonthViewAdapter(mContext, R.layout.day_grid_cell, 
-				position + 1, this.mYear, metrics, false);
-		customGridAdapter.notifyDataSetChanged();
-		yearlyMonthView.setAdapter(customGridAdapter);
+		
+		holder.monthAdapter.notifyDataSetChanged();
+		holder.monthView.setAdapter(holder.monthAdapter);
 	    
 		return row;
+	}
+	
+	static class YearHolder {
+		TextView month;
+		GridView monthView;
+		MonthViewAdapter monthAdapter;
 	}
 
 }

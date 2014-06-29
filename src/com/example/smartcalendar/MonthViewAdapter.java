@@ -3,7 +3,7 @@ package com.example.smartcalendar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -134,58 +134,63 @@ public class MonthViewAdapter extends BaseAdapter{
 				- (6 * 10) - getBarHeight())/ (6 - 1);
 	}
 	
+	@SuppressLint("NewApi")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;
+		MonthHolder holder = null;
 		if (row == null) {
 			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			row = inflater.inflate(R.layout.day_grid_cell, parent, false);
+			holder = new MonthHolder();
+			holder.day = (TextView) row.findViewById(R.id.textDate);
+			row.setTag(holder);
 		}		
 		else
-			row = (View) convertView;
-		text = (TextView) row.findViewById(R.id.textDate);
+			holder = (MonthHolder) row.getTag();
+		
 		String[] day_color = items.get(position).split("-");
 		String theDay = day_color[0];
-//		text.setText(theDay);
+
 		if (day_color[1].equals("NEXT") || day_color[1].equals("PREV"))
         {
-            text.setTextColor(Color.LTGRAY);
-            text.setText(theDay);
+            holder.day.setTextColor(Color.LTGRAY);
+            holder.day.setText(theDay);
             if (this.viewFlag) {
-            	text.setHeight(mDayHeight);
-            	row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+            	holder.day.setHeight(mDayHeight);
+            	row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
             }
         }
 		if (day_color[1].equals("DAYS"))
         {
-            text.setTextColor(Color.BLACK);
-            text.setText(theDay);
+            holder.day.setTextColor(Color.BLACK);
+            holder.day.setText(theDay);
             if (this.viewFlag) {
-            	text.setHeight(mDayHeight);
-            	row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+            	holder.day.setHeight(mDayHeight);
+            	row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
             }
         }
 		if (day_color[1].equals("CURRENT"))
         {
-            text.setTextColor(Color.BLUE);
-            text.setText(theDay);
+			holder.day.setTextColor(Color.BLUE);
+			holder.day.setText(theDay);
             if (this.viewFlag) {
-            	text.setHeight(mDayHeight);
-            	row.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.textborder));
+            	holder.day.setHeight(mDayHeight);
+            	row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
             }
         }
 		if (day_color[1].equals("WEEKDAYS"))
         {
-        	text.setText(theDay);
+			holder.day.setText(theDay);
             if (this.viewFlag) {
-            	text.setHeight(mTitleHeight);
+            	holder.day.setHeight(mTitleHeight);
             }
-            text.setTextColor(Color.BLACK);
-            text.setBackgroundColor(Color.YELLOW);
-            text.setTypeface(null, Typeface.BOLD);
-            text.setPadding(0, 0, 0, 10);
+            holder.day.setTextColor(Color.BLACK);
+            holder.day.setBackgroundColor(Color.YELLOW);
+            holder.day.setTypeface(null, Typeface.BOLD);
+            holder.day.setPadding(0, 0, 0, 10);
         }
-		row.setTag(theDay);
+		
 		return row;
 	}
 
@@ -208,5 +213,7 @@ public class MonthViewAdapter extends BaseAdapter{
 		return position;
 	}
 	
-
+	static class MonthHolder {
+		TextView day;
+	}
 }

@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -12,7 +13,13 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.View.OnTouchListener;
 
 
 public class DisplayMonthActivity extends Activity {
@@ -29,14 +36,14 @@ public class DisplayMonthActivity extends Activity {
 	private DisplayMetrics metrics;
 	private TextView actionBarText;
 	private boolean firstTime = true;
-
+	  
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_month);
 				
-		
+		final GestureDetector swipeDetector = new GestureDetector(this, new SwipeGesture(this));
 		// Get the calendar using default timezone  and locale
 		calendar = Calendar.getInstance(Locale.getDefault());
 		// Get the grid view 
@@ -73,6 +80,12 @@ public class DisplayMonthActivity extends Activity {
 				mCurrentDisplay + 1, yCurrentDisplay, metrics, true);
 		customGridAdapter.notifyDataSetChanged();
 		monthView.setAdapter(customGridAdapter);
+		monthView.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return swipeDetector.onTouchEvent(event);
+			}
+		});
 		
 		// Set the custom action bar
 		ActionBar actionBarTop = getActionBar();
@@ -134,6 +147,40 @@ public class DisplayMonthActivity extends Activity {
 		});
 	}	
 	
+	private final class SwipeGesture extends SimpleOnGestureListener {
+		private final int swipeMinDistance;
+		private final int swipeThresholdVelocity;
+
+		public SwipeGesture(Context context) {
+			final ViewConfiguration viewConfig = ViewConfiguration.get(context);
+			swipeMinDistance = viewConfig.getScaledTouchSlop();
+			swipeThresholdVelocity = viewConfig.getScaledMinimumFlingVelocity();
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+	        if (e1.getX() - e2.getX() > swipeMinDistance && Math.abs(velocityX) > swipeThresholdVelocity) {
+	            Toast.makeText(getApplicationContext(), "Next", Toast.LENGTH_SHORT).show();
+	            if(mCurrentDisplay == 11) {
+					mCurrentDisplay = 0;
+					yCurrentDisplay++;
+				}
+				else
+					mCurrentDisplay++;
+				setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
+	        }  else if (e2.getX() - e1.getX() > swipeMinDistance && Math.abs(velocityX) > swipeThresholdVelocity) {
+	            Toast.makeText(getApplicationContext(), "Prev", Toast.LENGTH_SHORT).show();
+	            if(mCurrentDisplay == 0) {
+					mCurrentDisplay = 11;
+					yCurrentDisplay--;
+				}
+				else 
+					mCurrentDisplay--;
+				setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
+	        }
+	        return false;
+		}
+	}
 	
 	private void setGridCellAdapterToDate(int month, int year)
     {
@@ -144,6 +191,6 @@ public class DisplayMonthActivity extends Activity {
 		monthView.setAdapter(customGridAdapter);
 		actionBarText.setText(months[month] + ", " + String.valueOf(year));
     }
-
+	
 
 }
