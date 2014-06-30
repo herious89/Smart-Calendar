@@ -15,16 +15,15 @@
             android:background="@color/purple"
             android:textColor="@color/white"> 
     </TextView> 
-    
-    <GridView
+ 
+ 
+    <TextView
         android:id="@+id/yearlyMonthView"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="90dp"
         android:layout_below="@+id/monthName"
-        android:numColumns="7"
         android:background="@color/white"
         android:padding="2dp">
-    </GridView>	
-    
+    </TextView>>
 
 </RelativeLayout>

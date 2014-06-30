@@ -1,31 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_footer_menu" >
+    android:background="@drawable/background_footer_menu" 
+    android:gravity="center">
     
-    <Button
-        android:id="@+id/btnNextMonth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignBaseline="@+id/titleDate"
-        android:layout_alignBottom="@+id/titleDate"
-        android:background="@drawable/nextbox"
-        android:minWidth="70dp"
-        android:text="Next"
-        android:textColor="@color/white" />
-
-    <TextView
-        android:id="@+id/titleDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <Button
+      <Button
         android:id="@+id/btnPrevMonth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,6 +15,33 @@
         android:background="@drawable/backbox"
         android:minWidth="70dp"
         android:text="Prev"
-        android:textColor="@color/white" />  
+        android:textColor="@color/white" />
+      
+      <TextView
+        android:id="@+id/titleDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+      
+        
+    <Button
+        android:id="@+id/btnNextMonth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/nextbox"
+        android:minWidth="70dp"
+        android:text="Next"
+        android:textColor="@color/white" />
+    
+    <Button
+        android:id="@+id/btnAddEvent"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/add"/>
 
-</RelativeLayout>
+
+
+
+</LinearLayout>

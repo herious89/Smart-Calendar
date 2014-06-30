@@ -35,7 +35,6 @@ public class DisplayYearActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_year);
 		
-		final GestureDetector swipeDetector = new GestureDetector(this, new SwipeGesture(this));
 		// Set custom action bar
 		ActionBar actionBarTop = getActionBar();
 		actionBarTop.setCustomView(R.layout.actionbar_top_year);
@@ -55,12 +54,6 @@ public class DisplayYearActivity extends Activity {
 						yCurrentDisplay);
 		yearGridAdapter.notifyDataSetChanged();
 		yearView.setAdapter(yearGridAdapter);
-		yearView.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return swipeDetector.onTouchEvent(event);
-			}
-		});
 		
 		// Set the buttons
 		btnNextYear = (Button) this.findViewById(R.id.btnNextYear);
@@ -96,29 +89,5 @@ public class DisplayYearActivity extends Activity {
 		actionBarText.setText(String.valueOf(year));
     }
 	
-	private final class SwipeGesture extends SimpleOnGestureListener {
-		private final int swipeMinDistance;
-		private final int swipeThresholdVelocity;
-
-		public SwipeGesture(Context context) {
-			final ViewConfiguration viewConfig = ViewConfiguration.get(context);
-			swipeMinDistance = viewConfig.getScaledTouchSlop();
-			swipeThresholdVelocity = viewConfig.getScaledMinimumFlingVelocity();
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-	        if (e1.getX() - e2.getX() > swipeMinDistance && Math.abs(velocityX) > swipeThresholdVelocity) {
-	            Toast.makeText(getApplicationContext(), "Next", Toast.LENGTH_SHORT).show();
-	            yCurrentDisplay++;
-				setGridCellAdapterToDate(yCurrentDisplay);
-	        }  else if (e2.getX() - e1.getX() > swipeMinDistance && Math.abs(velocityX) > swipeThresholdVelocity) {
-	            Toast.makeText(getApplicationContext(), "Prev", Toast.LENGTH_SHORT).show();
-	            yCurrentDisplay--;
-				setGridCellAdapterToDate(yCurrentDisplay);
-	        }
-	        return false;
-		}
-	}
 
 }
