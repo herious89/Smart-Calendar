@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:layout_below="@+id/monthName"
-        android:background="@color/white"
+        android:background="@color/lightblue2"
         android:padding="2dp">
     </TextView>>
 

@@ -4,23 +4,13 @@ package com.example.smartcalendar;
 
 import android.app.Activity;
 import android.app.ActionBar;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.View.OnTouchListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.os.Build;
+
 
 public class DisplayYearActivity extends Activity {
 

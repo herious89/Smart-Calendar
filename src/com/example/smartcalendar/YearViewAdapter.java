@@ -1,19 +1,14 @@
 package com.example.smartcalendar;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +17,6 @@ public class YearViewAdapter extends BaseAdapter{
 	private Context mContext;
 	private int mYear;
 	private final String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-	private DisplayMetrics metrics;
 	private ArrayList<String> items;
 	private ApplicationData data;
 	public final static String SELECTED_YEAR = "", SELECTED_MONTH = "";
@@ -31,7 +25,6 @@ public class YearViewAdapter extends BaseAdapter{
 	public YearViewAdapter(Context context, int viewID, int year) {
 		this.mYear = year;
 		this.mContext = context;
-		this.metrics = new DisplayMetrics();
 		data = (ApplicationData) this.mContext.getApplicationContext();
 	}
 	

@@ -1,20 +1,17 @@
 package com.example.smartcalendar;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.GregorianCalendar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -25,8 +22,9 @@ public class MonthViewAdapter extends BaseAdapter{
 	private ArrayList<String> items;
 	private Context mContext;
 	private DisplayMetrics mDisplayMetrics;
-	private int mTitleHeight, mDayHeight;
-	private boolean viewFlag = false;
+	private static  String[] str_arr ;
+	private int mTitleHeight, mDayHeight, displayWidth, 
+		displayHeight, statusbar_height, required_height, column_width, column_height;
 	ApplicationData data;
 	
 	public MonthViewAdapter(Context context, int textViewID, 
@@ -35,10 +33,30 @@ public class MonthViewAdapter extends BaseAdapter{
 		year = pYear;
 		this.mContext = context;
 		mDisplayMetrics = metrics;
-		this.viewFlag = flaq;
+		displayWidth = metrics.widthPixels ;
+		displayHeight = metrics.heightPixels;
+		statusbar_height = getStatusBarHeight(mContext.getApplicationContext());
+		required_height = displayHeight - statusbar_height;
+		int arrSize = 7 * 7;
+		str_arr = new String[arrSize];
+		for(int i=0;i<arrSize;i++){
+			str_arr[i] = String.valueOf(i);
+		}
+		column_width = displayWidth / 7;
+		column_height = required_height / 7;
+		
 		data = (ApplicationData) this.mContext.getApplicationContext();
 		items = new ArrayList<String>(data.createMonth(month, year).size());
 		printMonth(month, year);
+	}
+	
+	public static int getStatusBarHeight(Context context) {
+		int result = 0;
+		int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+		if (resourceId > 0) {
+			result = context.getResources().getDimensionPixelSize(resourceId);
+		}
+		return result;
 	}
 	
 	private int getBarHeight() {
@@ -72,6 +90,7 @@ public class MonthViewAdapter extends BaseAdapter{
 			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			row = inflater.inflate(R.layout.day_grid_cell, parent, false);
 			holder = new MonthHolder();
+			holder.lin = (LinearLayout) row.findViewById(R.id.layout);
 			holder.day = (TextView) row.findViewById(R.id.textDate);
 			row.setTag(holder);
 		}		
@@ -80,17 +99,21 @@ public class MonthViewAdapter extends BaseAdapter{
 		
 		String[] day_color = items.get(position).split("-");
 		String theDay = day_color[0];
-
+		
 		if (day_color[1].equals("NEXT") || day_color[1].equals("PREV"))
-        {
+        {	
 			holder.day.setTextColor(Color.LTGRAY);
 			holder.day.setText(theDay);
+			holder.day.setHeight(column_height);
+			holder.day.setWidth(column_width);
 			row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
         }
 		if (day_color[1].equals("DAYS"))
         {
             holder.day.setTextColor(Color.BLACK);
             holder.day.setText(theDay);
+			holder.day.setHeight(column_height);
+			holder.day.setWidth(column_width);
             row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
 
         }
@@ -98,18 +121,21 @@ public class MonthViewAdapter extends BaseAdapter{
         {
 			holder.day.setTextColor(Color.BLUE);
 			holder.day.setText(theDay);
+			holder.day.setHeight(column_height);
+			holder.day.setWidth(column_width);
 			row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
         }
 		if (day_color[1].equals("WEEKDAYS"))
         {
-			holder.day.setVisibility(View.GONE);
-			holder.day.setVisibility(View.VISIBLE);
 			holder.day.setHeight(mTitleHeight);
+			holder.day.setWidth(column_width);
 			holder.day.setText(theDay);
-			holder.day.setTextColor(Color.BLACK);
-			holder.day.setBackgroundColor(Color.YELLOW);
+			holder.day.setTextColor(Color.WHITE);
+			holder.day.setBackgroundColor(Color.MAGENTA);
 			holder.day.setTypeface(null, Typeface.BOLD);
+			holder.day.setPadding(0, 0, 0, 10);
         }
+		
 		
 		return row;
 	}
@@ -135,5 +161,6 @@ public class MonthViewAdapter extends BaseAdapter{
 	
 	static class MonthHolder {
 		TextView day;
+		LinearLayout lin;
 	}
 }
