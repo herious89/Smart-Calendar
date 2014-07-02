@@ -65,6 +65,7 @@ public class YearViewAdapter extends BaseAdapter{
 		
 		holder.month.setText(months[position]);
 		holder.month.setClickable(true);
+		holder.month.setBackgroundColor(Color.MAGENTA);
 		final int month = position;
 		holder.month.setOnClickListener(new View.OnClickListener() {
 			

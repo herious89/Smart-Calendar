@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class DisplayYearActivity extends Activity {
@@ -17,7 +18,7 @@ public class DisplayYearActivity extends Activity {
 	private TextView actionBarText;
 	private GridView yearView;
 	private YearViewAdapter yearGridAdapter;
-	private Button btnNextYear, btnPrevYear;
+	private Button btnNextYear, btnPrevYear, btnYearSettings;
 	private int yCurrentDisplay;
 
 	@Override
@@ -66,6 +67,16 @@ public class DisplayYearActivity extends Activity {
 				// TODO Auto-generated method stub
 				yCurrentDisplay--;
 				setGridCellAdapterToDate(yCurrentDisplay);
+			}
+		});
+		
+		btnYearSettings = (Button) this.findViewById(R.id.btnYearSettings);
+		btnYearSettings.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_LONG).show();
 			}
 		});
 	}
