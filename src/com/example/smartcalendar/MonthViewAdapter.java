@@ -26,9 +26,10 @@ public class MonthViewAdapter extends BaseAdapter{
 	private int mTitleHeight, mDayHeight, displayWidth, 
 		displayHeight, statusbar_height, required_height, column_width, column_height;
 	ApplicationData data;
+	private boolean viewFlag = false;
 	
 	public MonthViewAdapter(Context context, int textViewID, 
-			int pMonth, int pYear, DisplayMetrics metrics, boolean flaq) {
+			int pMonth, int pYear, DisplayMetrics metrics, boolean flag) {
 		month = pMonth;
 		year = pYear;
 		this.mContext = context;
@@ -44,9 +45,9 @@ public class MonthViewAdapter extends BaseAdapter{
 		}
 		column_width = displayWidth / 7;
 		column_height = required_height / 7;
-		
+		this.viewFlag = flag;
 		data = (ApplicationData) this.mContext.getApplicationContext();
-		items = new ArrayList<String>(data.createMonth(month, year).size());
+		items = new ArrayList<String>(data.createMonth(month, year, viewFlag).size());
 		printMonth(month, year);
 	}
 	
@@ -73,7 +74,7 @@ public class MonthViewAdapter extends BaseAdapter{
 	}	
 	
 	private void printMonth(int pMonth, int pYear) {
-		for (String s : data.createMonth(pMonth, pYear))
+		for (String s : data.createMonth(pMonth, pYear, viewFlag))
 			items.add(s);
 		// Set the height for each cell of grid view
 		mTitleHeight = 40;
@@ -100,40 +101,56 @@ public class MonthViewAdapter extends BaseAdapter{
 		String[] day_color = items.get(position).split("-");
 		String theDay = day_color[0];
 		
-		if (day_color[1].equals("NEXT") || day_color[1].equals("PREV"))
-        {	
+		if (day_color[1].equals("NEXT") || day_color[1].equals("PREV")) {	
 			holder.day.setTextColor(Color.LTGRAY);
 			holder.day.setText(theDay);
-			holder.day.setHeight(column_height);
-			holder.day.setWidth(column_width);
-			row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
+			if (this.viewFlag) {
+				holder.day.setTextSize(15);
+				holder.day.setHeight(column_height);
+				holder.day.setWidth(column_width);
+				row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
+			}
         }
-		if (day_color[1].equals("DAYS"))
-        {
-            holder.day.setTextColor(Color.BLACK);
+		if (day_color[1].equals("DAYS")) {
+			if (position % 7 == 0 || position % 7 == 6)
+				holder.day.setTextColor(Color.RED);
+			else
+				holder.day.setTextColor(Color.BLACK);
             holder.day.setText(theDay);
-			holder.day.setHeight(column_height);
-			holder.day.setWidth(column_width);
-            row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
+            if (this.viewFlag) {
+				holder.day.setTextSize(15);
+				holder.day.setHeight(column_height);
+				holder.day.setWidth(column_width);
+	            row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
+            }
 
         }
-		if (day_color[1].equals("CURRENT"))
-        {
+		if (day_color[1].equals("CURRENT")) {
 			holder.day.setTextColor(Color.BLUE);
 			holder.day.setText(theDay);
-			holder.day.setHeight(column_height);
-			holder.day.setWidth(column_width);
-			row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
+			if (this.viewFlag) {
+				holder.day.setTextSize(15);
+				holder.day.setHeight(column_height);
+				holder.day.setWidth(column_width);
+				row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
+			}
         }
-		if (day_color[1].equals("WEEKDAYS"))
-        {
-			holder.day.setHeight(mTitleHeight);
-			holder.day.setWidth(column_width);
-			holder.day.setText(theDay);
-			holder.day.setTextColor(Color.WHITE);
-			holder.day.setBackgroundColor(Color.MAGENTA);
-			holder.day.setTypeface(null, Typeface.BOLD);
-			holder.day.setPadding(0, 0, 0, 10);
+		if (day_color[1].equals("WEEKDAYS")) {
+			holder.day.setText(theDay); 
+			if (day_color[0].equals("S"))
+				holder.day.setTextColor(Color.RED);
+			else
+				holder.day.setTextColor(Color.BLUE);
+			
+			if (this.viewFlag) {
+				holder.day.setTextSize(15);
+				holder.day.setTextColor(Color.WHITE);
+				holder.day.setHeight(mTitleHeight);
+				holder.day.setWidth(column_width);
+				holder.day.setBackgroundColor(Color.MAGENTA);
+				holder.day.setTypeface(null, Typeface.BOLD);
+				holder.day.setPadding(0, 0, 0, 10);
+			}
         }
 		
 		

@@ -19,7 +19,7 @@ public class ApplicationData extends Application{
 	public void setMonth(int m) { month = m; }
 	public void setFlaq(boolean f) { flaq = f; }
 	
-	public ArrayList<String> createMonth(int pMonth, int pYear) {
+	public ArrayList<String> createMonth(int pMonth, int pYear, boolean flag) {
 		String[] weekdays = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 		String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 		int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -32,7 +32,8 @@ public class ApplicationData extends Application{
 		ArrayList<String> items = new ArrayList<String>();
 		Calendar calendar = Calendar.getInstance();
 		int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-		
+		if (!flag)
+			weekdays = new String[] {"S", "M", "T", "W", "Th", "F", "S"};
 		for (String day : weekdays) {
 			day += "-WEEKDAYS";
 			items.add(day);

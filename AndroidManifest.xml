@@ -28,13 +28,11 @@
         <activity
             android:name="com.example.smartcalendar.DisplayMonthActivity"
             android:label="@string/title_activity_main" 
-            android:uiOptions="splitActionBarWhenNarrow"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.example.smartcalendar.DisplayYearActivity"
             android:label="@string/title_activity_display_year" 
-            android:uiOptions="splitActionBarWhenNarrow"
             android:screenOrientation="portrait">
         </activity>
     </application>

@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,13 +21,15 @@ public class YearViewAdapter extends BaseAdapter{
 	private final String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	private ArrayList<String> items;
 	private ApplicationData data;
+	private MonthViewAdapter customGridAdapter;
 	public final static String SELECTED_YEAR = "", SELECTED_MONTH = "";
+	private DisplayMetrics metrics;
 	
-	
-	public YearViewAdapter(Context context, int viewID, int year) {
+	public YearViewAdapter(Context context, int viewID, int year, DisplayMetrics m) {
 		this.mYear = year;
 		this.mContext = context;
 		data = (ApplicationData) this.mContext.getApplicationContext();
+		metrics = m;
 	}
 	
 
@@ -57,7 +61,8 @@ public class YearViewAdapter extends BaseAdapter{
 			row = inflater.inflate(R.layout.month_grid_cell, parent, false);
 			holder = new YearHolder();
 			holder.month = (TextView) row.findViewById(R.id.monthName);
-			holder.monthView = (TextView) row.findViewById(R.id.yearlyMonthView);
+//			holder.monthView = (TextView) row.findViewById(R.id.yearlyMonthView);
+			holder.monthView = (GridView) row.findViewById(R.id.yearlyMonthView);
 			row.setTag(holder);
 		}
 		else 
@@ -83,54 +88,21 @@ public class YearViewAdapter extends BaseAdapter{
 			}
 		});
 		
-		items = new ArrayList<String>(data.createMonth(position + 1, mYear).size());
-		for (String s : data.createMonth(position + 1, mYear))
+		items = new ArrayList<String>(data.createMonth(position + 1, mYear, false).size());
+		for (String s : data.createMonth(position + 1, mYear, false))
 			items.add(s);
-		String temp = "";
-		String result = "";
-		for (int i = 7; i < items.size(); i++) {
-			String[] day = items.get(i).split("-");
-			if (Integer.parseInt(day[0]) <= 9) {
-				if (day[1].equals("NEXT") ||  day[1].equals("PREV"))
-					temp =String.format("%1$4s", " ");
-				else
-					temp = String.format("%1$4s", day[0]);
-			}
-			else {
-				if (day[1].equals("NEXT") ||  day[1].equals("PREV"))
-					temp =String.format("%1$3s", "     ");
-				else
-					temp = String.format("%1$3s", day[0]);
-			}
-			if (i % 7 == 6)
-				temp += "\n";
-			result += temp;
-		}
 
-		holder.monthView.setText(result);
-		holder.monthView.setTextSize(10);
-		holder.monthView.setTextColor(Color.BLACK);
-		holder.monthView.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Toast.makeText(mContext, "monthName is clicked", Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent(mContext, DisplayMonthActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				ApplicationData data = (ApplicationData) mContext.getApplicationContext();
-				data.setFlaq(true);
-				data.setMonth(month);
-				data.setYear(mYear);
-				mContext.startActivity(intent);
-			}
-		});
+		customGridAdapter = new MonthViewAdapter(mContext, R.layout.day_grid_cell, 
+				position + 1, this.mYear, metrics, false);
+		customGridAdapter.notifyDataSetChanged();
+		holder.monthView.setAdapter(customGridAdapter);
 		return row;
 	}
 	
 	static class YearHolder {
 		TextView month;
-		TextView monthView;
+		//TextView monthView;
+		GridView monthView;
 		MonthViewAdapter monthAdapter;
 	}
 

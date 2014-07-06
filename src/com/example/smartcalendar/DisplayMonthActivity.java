@@ -1,11 +1,14 @@
 package com.example.smartcalendar;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -25,33 +28,38 @@ import android.view.View.OnTouchListener;
 public class DisplayMonthActivity extends Activity {
 	
 	public final static String CURRENT_DISPLAY_YEAR = "";
-	private Button btnAdd, btnNextMonth, btnPrevMonth, btnMonthSettings;
+	private Button btnAdd, btnMonthSettings;
 	private Calendar calendar;
 	private GridView monthView;
 	private MonthViewAdapter customGridAdapter;
 	private final String[] months = {"January", "February", "March", "April", 
 									"May", "June", "July", "August", 
 									"September", "October", "November", "December"};
+	private final String[] views = {"Year View", "Month View"};
 	private int mCurrentDisplay, yCurrentDisplay;
 	private DisplayMetrics metrics;
 	private TextView actionBarText;
 	private boolean firstTime = true;
-		  
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_month);
-		
+								
+		// Object for gesture detection
 		final GestureDetector swipeDetector = new GestureDetector(this, new SwipeGesture(this));
+		
 		// Get the calendar using default timezone  and locale
 		calendar = Calendar.getInstance(Locale.getDefault());
+		
 		// Get the grid view 
 		monthView = (GridView) this.findViewById(R.id.monthView);
+		
 		// Get the current month and year
 		mCurrentDisplay = calendar.get(Calendar.MONTH);
 		yCurrentDisplay = calendar.get(Calendar.YEAR);
 		
+		// Get the current month and year display
 		ApplicationData data = (ApplicationData) this.getApplicationContext();
 		if (data.getFlaq()) {
 			mCurrentDisplay = data.getMonth();
@@ -99,6 +107,42 @@ public class DisplayMonthActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_LONG).show();
+				final ArrayList selectedItem = new ArrayList();
+				selectedItem.add(1);
+				final AlertDialog.Builder viewDialog = new AlertDialog.Builder(DisplayMonthActivity.this);
+				viewDialog.setTitle("Switch to...");
+				viewDialog.setSingleChoiceItems(views, 1, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						if (!selectedItem.contains(which)) {
+							selectedItem.remove(0);
+							selectedItem.add(which);
+						}
+							
+					}
+				});
+				
+				viewDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						if (selectedItem.get(0).equals(0)) {
+							Toast.makeText(getApplicationContext(), "Change to yearView", Toast.LENGTH_LONG).show();
+							Intent intent = new Intent(getApplicationContext(), DisplayYearActivity.class);
+							intent.putExtra(CURRENT_DISPLAY_YEAR, yCurrentDisplay);
+							startActivity(intent);
+						} else
+							Toast.makeText(getApplicationContext(), "Stay at monthView", Toast.LENGTH_LONG).show();
+						dialog.cancel();
+					}
+					
+				});
+				
+				AlertDialog dialog = viewDialog.create();
+				dialog.show();
 			}
 		});
 			
@@ -127,6 +171,7 @@ public class DisplayMonthActivity extends Activity {
 			}
 		});
 	}	
+	
 	
 	
 	private void setGridCellAdapterToDate(int month, int year)
