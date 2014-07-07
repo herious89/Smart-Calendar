@@ -17,8 +17,8 @@
         <activity
             android:name="com.example.smartcalendar.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,13 +27,21 @@
         </activity>
         <activity
             android:name="com.example.smartcalendar.DisplayMonthActivity"
-            android:label="@string/title_activity_main" 
-            android:screenOrientation="portrait">
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.smartcalendar.DisplayYearActivity"
-            android:label="@string/title_activity_display_year" 
-            android:screenOrientation="portrait">
+            android:label="@string/title_activity_display_year"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.smartcalendar.AddEventActivity"
+            android:label="@string/title_activity_add_event" >
+        </activity>
+        <activity
+            android:name="com.example.smartcalendar.DisplayWeekActivity"
+            android:label="@string/title_activity_display_week" >
         </activity>
     </application>
 

@@ -66,7 +66,7 @@ public class ApplicationData extends Application{
 		// Check for leap year
 		if (cal.isLeapYear(Calendar.YEAR) && pMonth == 1) 
 			daysInMonth++;
-		Log.d("Here", "****** here" + trailingSpaces);
+		
 		// Calculate trailing spaces 
 		for (int i = 0; i < trailingSpaces; i++) {
 			items.add(String.valueOf(daysInPrevMonth - trailingSpaces + 1 + i) + "-PREV"

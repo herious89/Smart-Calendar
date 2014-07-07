@@ -61,7 +61,6 @@ public class YearViewAdapter extends BaseAdapter{
 			row = inflater.inflate(R.layout.month_grid_cell, parent, false);
 			holder = new YearHolder();
 			holder.month = (TextView) row.findViewById(R.id.monthName);
-//			holder.monthView = (TextView) row.findViewById(R.id.yearlyMonthView);
 			holder.monthView = (GridView) row.findViewById(R.id.yearlyMonthView);
 			row.setTag(holder);
 		}

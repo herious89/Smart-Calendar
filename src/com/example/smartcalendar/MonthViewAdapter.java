@@ -23,19 +23,21 @@ public class MonthViewAdapter extends BaseAdapter{
 	private Context mContext;
 	private DisplayMetrics mDisplayMetrics;
 	private static  String[] str_arr ;
-	private int mTitleHeight, mDayHeight, displayWidth, 
-		displayHeight, statusbar_height, required_height, column_width, column_height;
-	ApplicationData data;
+	private int mTitleHeight, displayWidth, displayHeight, 
+		statusbar_height, required_height, column_width, column_height;
+	private ApplicationData data;
 	private boolean viewFlag = false;
+	private int selectedItem, prevSelectedItem;
 	
-	public MonthViewAdapter(Context context, int textViewID, 
+	public MonthViewAdapter(Context context, int viewID, 
 			int pMonth, int pYear, DisplayMetrics metrics, boolean flag) {
 		month = pMonth;
 		year = pYear;
 		this.mContext = context;
+		mTitleHeight = 40;
 		mDisplayMetrics = metrics;
-		displayWidth = metrics.widthPixels ;
-		displayHeight = metrics.heightPixels;
+		displayWidth = mDisplayMetrics.widthPixels ;
+		displayHeight = mDisplayMetrics.heightPixels;
 		statusbar_height = getStatusBarHeight(mContext.getApplicationContext());
 		required_height = displayHeight - statusbar_height;
 		int arrSize = 7 * 7;
@@ -43,6 +45,8 @@ public class MonthViewAdapter extends BaseAdapter{
 		for(int i=0;i<arrSize;i++){
 			str_arr[i] = String.valueOf(i);
 		}
+		selectedItem = 0;
+		selectedItem = -1;
 		column_width = displayWidth / 7;
 		column_height = required_height / 7;
 		this.viewFlag = flag;
@@ -60,26 +64,10 @@ public class MonthViewAdapter extends BaseAdapter{
 		return result;
 	}
 	
-	private int getBarHeight() {
-		switch (mDisplayMetrics.densityDpi) {
-		case DisplayMetrics.DENSITY_HIGH:
-			return 48;
-		case DisplayMetrics.DENSITY_MEDIUM:
-			return 32;
-		case DisplayMetrics.DENSITY_LOW:
-			return 24;
-		default:
-			return 48;
-		}
-	}	
 	
 	private void printMonth(int pMonth, int pYear) {
 		for (String s : data.createMonth(pMonth, pYear, viewFlag))
 			items.add(s);
-		// Set the height for each cell of grid view
-		mTitleHeight = 40;
-		mDayHeight = (mDisplayMetrics.heightPixels - mTitleHeight 
-				- (6 * 13) - getBarHeight())/ (6 - 1);
 	}
 	
 	@SuppressLint("NewApi")
@@ -104,37 +92,40 @@ public class MonthViewAdapter extends BaseAdapter{
 		if (day_color[1].equals("NEXT") || day_color[1].equals("PREV")) {	
 			holder.day.setTextColor(Color.LTGRAY);
 			holder.day.setText(theDay);
-			if (this.viewFlag) {
+			if (this.viewFlag || prevSelectedItem == position) {
 				holder.day.setTextSize(15);
 				holder.day.setHeight(column_height);
 				holder.day.setWidth(column_width);
-				row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
+				holder.day.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
 			}
         }
+		
 		if (day_color[1].equals("DAYS")) {
 			if (position % 7 == 0 || position % 7 == 6)
 				holder.day.setTextColor(Color.RED);
 			else
 				holder.day.setTextColor(Color.BLACK);
             holder.day.setText(theDay);
-            if (this.viewFlag) {
+            if (this.viewFlag || prevSelectedItem == position) {
 				holder.day.setTextSize(15);
 				holder.day.setHeight(column_height);
 				holder.day.setWidth(column_width);
-	            row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
+	            holder.day.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
             }
 
         }
+		
 		if (day_color[1].equals("CURRENT")) {
 			holder.day.setTextColor(Color.BLUE);
 			holder.day.setText(theDay);
-			if (this.viewFlag) {
+			if (this.viewFlag || prevSelectedItem == position) {
 				holder.day.setTextSize(15);
 				holder.day.setHeight(column_height);
 				holder.day.setWidth(column_width);
-				row.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
+				holder.day.setBackground(this.mContext.getResources().getDrawable(R.drawable.textborder));
 			}
         }
+		
 		if (day_color[1].equals("WEEKDAYS")) {
 			holder.day.setText(theDay); 
 			if (day_color[0].equals("S"))
@@ -153,11 +144,17 @@ public class MonthViewAdapter extends BaseAdapter{
 			}
         }
 		
+		if (selectedItem == position && !day_color[1].equals("WEEKDAYS"))
+			holder.day.setBackgroundColor(Color.parseColor("#66CCFF"));
 		
 		return row;
 	}
 
-
+	public void setSelectedItem(int pos) {
+		prevSelectedItem = selectedItem;
+		selectedItem = pos;
+	} 
+	
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub

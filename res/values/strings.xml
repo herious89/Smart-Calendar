@@ -36,5 +36,7 @@
     <color name="purple">#690696</color>
 
     <string name="title_activity_display_year">DisplayYearActivity</string>
+    <string name="title_activity_add_event">AddEventActivity</string>
+    <string name="title_activity_display_week">DisplayWeekActivity</string>
 
 </resources>

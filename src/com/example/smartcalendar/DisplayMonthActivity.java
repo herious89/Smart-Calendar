@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import android.widget.AdapterView.OnItemClickListener;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -28,6 +33,7 @@ import android.view.View.OnTouchListener;
 public class DisplayMonthActivity extends Activity {
 	
 	public final static String CURRENT_DISPLAY_YEAR = "";
+	public final static String CURRENT_DISPLAY_MONTH = "";
 	private Button btnAdd, btnMonthSettings;
 	private Calendar calendar;
 	private GridView monthView;
@@ -35,7 +41,7 @@ public class DisplayMonthActivity extends Activity {
 	private final String[] months = {"January", "February", "March", "April", 
 									"May", "June", "July", "August", 
 									"September", "October", "November", "December"};
-	private final String[] views = {"Year View", "Month View"};
+	private final String[] views = {"Year View", "Month View", "Week View"};
 	private int mCurrentDisplay, yCurrentDisplay;
 	private DisplayMetrics metrics;
 	private TextView actionBarText;
@@ -60,7 +66,7 @@ public class DisplayMonthActivity extends Activity {
 		yCurrentDisplay = calendar.get(Calendar.YEAR);
 		
 		// Get the current month and year display
-		ApplicationData data = (ApplicationData) this.getApplicationContext();
+		final ApplicationData data = (ApplicationData) this.getApplicationContext();
 		if (data.getFlaq()) {
 			mCurrentDisplay = data.getMonth();
 			yCurrentDisplay = data.getYear();
@@ -70,14 +76,12 @@ public class DisplayMonthActivity extends Activity {
 		metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		
-		Log.d("Here", "True or false:********" + firstTime);
 		if (!firstTime) {
 			Intent intent = getIntent();
 			mCurrentDisplay = intent.getIntExtra(YearViewAdapter.SELECTED_MONTH, 
 					calendar.get(Calendar.MONTH));
 			yCurrentDisplay = intent.getIntExtra(YearViewAdapter.SELECTED_YEAR,
 					calendar.get(Calendar.YEAR));
-			Log.d("Here", "******" + mCurrentDisplay + yCurrentDisplay);
 			setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
 		} 
 		
@@ -97,6 +101,8 @@ public class DisplayMonthActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_LONG).show();
+				Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
+				startActivity(intent);
 			}
 		});
 		
@@ -107,7 +113,7 @@ public class DisplayMonthActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_LONG).show();
-				final ArrayList selectedItem = new ArrayList();
+				final ArrayList<Integer> selectedItem = new ArrayList<Integer>();
 				selectedItem.add(1);
 				final AlertDialog.Builder viewDialog = new AlertDialog.Builder(DisplayMonthActivity.this);
 				viewDialog.setTitle("Switch to...");
@@ -129,10 +135,16 @@ public class DisplayMonthActivity extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
-						if (selectedItem.get(0).equals(0)) {
+						if (selectedItem.get(0) == 0) {
 							Toast.makeText(getApplicationContext(), "Change to yearView", Toast.LENGTH_LONG).show();
 							Intent intent = new Intent(getApplicationContext(), DisplayYearActivity.class);
 							intent.putExtra(CURRENT_DISPLAY_YEAR, yCurrentDisplay);
+							startActivity(intent);
+						} else if (selectedItem.get(0) == 2) {
+							Toast.makeText(getApplicationContext(), "Change to weekView", Toast.LENGTH_LONG).show();
+							Intent intent = new Intent(getApplicationContext(), DisplayWeekActivity.class);
+							data.setMonth(mCurrentDisplay);
+							data.setYear(yCurrentDisplay);
 							startActivity(intent);
 						} else
 							Toast.makeText(getApplicationContext(), "Stay at monthView", Toast.LENGTH_LONG).show();
@@ -153,9 +165,10 @@ public class DisplayMonthActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(getApplicationContext(), DisplayYearActivity.class);
-				intent.putExtra(CURRENT_DISPLAY_YEAR, yCurrentDisplay);
-				startActivity(intent);
+//				Intent intent = new Intent(getApplicationContext(), DisplayYearActivity.class);
+//				intent.putExtra(CURRENT_DISPLAY_YEAR, yCurrentDisplay);
+//				startActivity(intent);
+				new SwitchToYearView().execute();
 			}
 		});
 		
@@ -169,6 +182,19 @@ public class DisplayMonthActivity extends Activity {
 			public boolean onTouch(View v, MotionEvent event) {
 				return swipeDetector.onTouchEvent(event);
 			}
+		});
+		
+		monthView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View v, int postion,
+					long id) {
+				// TODO Auto-generated method stub
+				MonthViewAdapter adapter = (MonthViewAdapter) parent.getAdapter();
+				adapter.setSelectedItem(postion);
+				adapter.notifyDataSetChanged();
+			}
+			
 		});
 	}	
 	
@@ -217,5 +243,32 @@ public class DisplayMonthActivity extends Activity {
 	        }
 	        return false;
 		}
+	}
+	
+	private class SwitchToYearView extends AsyncTask<Integer, Void, Void> {
+		
+		private int year;
+		private ProgressDialog dialog = new ProgressDialog(DisplayMonthActivity.this);
+		
+		@Override
+		protected void onPreExecute() {
+			year = yCurrentDisplay;
+	        this.dialog.setMessage("Please wait...");
+	        this.dialog.show();
+	    }
+		
+		@Override
+		protected Void doInBackground(Integer... arg0) {
+			// TODO Auto-generated method stub
+			Intent intent = new Intent(getApplicationContext(), DisplayYearActivity.class);
+			intent.putExtra(CURRENT_DISPLAY_YEAR, year);
+			startActivity(intent);
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			this.dialog.dismiss();
+		}		
 	}
 }

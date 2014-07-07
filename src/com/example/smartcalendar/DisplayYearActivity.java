@@ -174,8 +174,7 @@ public class DisplayYearActivity extends Activity {
 		@Override
 		protected void onPostExecute(Void result) {
 			this.dialog.dismiss();
-		}
-		
+		}		
 	}
 
 }
