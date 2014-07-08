@@ -34,6 +34,7 @@
     <color name="Khaki">#F0E68C</color>
     <color name="Mint">#C5E3BF</color>
     <color name="purple">#690696</color>
+    <color name="magenta">#FF00FF</color>
 
     <string name="title_activity_display_year">DisplayYearActivity</string>
     <string name="title_activity_add_event">AddEventActivity</string>

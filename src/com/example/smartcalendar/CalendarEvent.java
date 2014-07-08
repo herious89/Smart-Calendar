@@ -3,13 +3,22 @@ package com.example.smartcalendar;
 public class CalendarEvent {
 	private int eventID;
 	private String eventName;
+	private String eventDate;
+	
+	public String getEventDate() {
+		return eventDate;
+	}
+	
+	public void setEventDate(String date) {
+		this.eventDate = date;
+	}
 	
 	public int getEventID() {
 		return eventID;
 	}
 	
 	public void setEventID(int id) {
-		eventID = id;
+		this.eventID = id;
 	}
 	
 	public String getEventName() {

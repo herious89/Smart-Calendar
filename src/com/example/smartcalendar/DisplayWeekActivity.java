@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.os.Build;
 
 public class DisplayWeekActivity extends Activity {
@@ -39,8 +40,31 @@ public class DisplayWeekActivity extends Activity {
 		
 		actionBarText = (TextView) this.findViewById(R.id.weeklyEvent);
 		actionBarText.setText("Weekly Event");
+		actionBarText.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "event is clicked", Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(getApplicationContext(), DisplayMonthActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				ApplicationData data = (ApplicationData) getApplicationContext();
+				data.setFlaq(true);
+				data.setMonth(mCurrentDisplay);
+				data.setYear(yCurrentDisplay);
+				startActivity(intent);
+			}
+		});
 		
 		btnWeekSettings = (Button) this.findViewById(R.id.btnWeekSettings);
+		btnWeekSettings.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "setting is clicked", Toast.LENGTH_SHORT).show();
+			}
+		});
 		
 		weekView = (ListView) this.findViewById(R.id.weekView);
 		customListAdapter = new WeekViewAdapter(getApplicationContext(), R.id.weekView, 
