@@ -23,7 +23,7 @@ public class MonthViewAdapter extends BaseAdapter{
 	private Context mContext;
 	private DisplayMetrics mDisplayMetrics;
 	private static  String[] str_arr ;
-	private int mTitleHeight, displayWidth, displayHeight, 
+	private int displayWidth, displayHeight, 
 		statusbar_height, required_height, column_width, column_height;
 	private ApplicationData data;
 	private boolean viewFlag = false;
@@ -34,7 +34,6 @@ public class MonthViewAdapter extends BaseAdapter{
 		month = pMonth;
 		year = pYear;
 		this.mContext = context;
-		mTitleHeight = 40;
 		mDisplayMetrics = metrics;
 		displayWidth = mDisplayMetrics.widthPixels ;
 		displayHeight = mDisplayMetrics.heightPixels;
@@ -46,7 +45,7 @@ public class MonthViewAdapter extends BaseAdapter{
 			str_arr[i] = String.valueOf(i);
 		}
 		selectedItem = 0;
-		selectedItem = -1;
+		prevSelectedItem = -1;
 		column_width = displayWidth / 7;
 		column_height = required_height / 7;
 		this.viewFlag = flag;
@@ -118,6 +117,8 @@ public class MonthViewAdapter extends BaseAdapter{
 		if (day_color[1].equals("CURRENT")) {
 			holder.day.setTextColor(Color.BLUE);
 			holder.day.setText(theDay);
+			if (selectedItem == 0)
+				setSelectedItem(position);
 			if (this.viewFlag || prevSelectedItem == position) {
 				holder.day.setTextSize(15);
 				holder.day.setHeight(column_height);
@@ -136,11 +137,9 @@ public class MonthViewAdapter extends BaseAdapter{
 			if (this.viewFlag) {
 				holder.day.setTextSize(15);
 				holder.day.setTextColor(Color.WHITE);
-				holder.day.setHeight(mTitleHeight);
 				holder.day.setWidth(column_width);
 				holder.day.setBackgroundColor(Color.MAGENTA);
 				holder.day.setTypeface(null, Typeface.BOLD);
-				holder.day.setPadding(0, 0, 0, 10);
 			}
         }
 		

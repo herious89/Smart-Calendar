@@ -5,15 +5,6 @@
     android:background="@drawable/background_footer_menu" >
 	
 
-    <Button
-      	android:id="@+id/btnPrevYear"
-  		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_toLeftOf="@+id/titleYear"
-	    android:background="@drawable/backbox"
-        android:minWidth="70dp"
-        android:text="Prev"
-	    android:textColor="@color/white" /> 
 	
 	 <TextView
 		android:id="@+id/titleYear"
@@ -24,21 +15,13 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 	
-   	<Button
-	    android:id="@+id/btnNextYear"
-		android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:background="@drawable/nextbox"
-	    android:layout_toRightOf="@+id/titleYear"
-	    android:minWidth="70dp"
-	    android:text="Next"
-	    android:textColor="@color/white" />  
+ 
 	      
 	<Button 
 	    android:id="@+id/btnYearSettings"
 	    android:layout_width="30dp"
 	    android:layout_height="30dp"
-	    android:layout_alignBaseline="@+id/btnNextYear"
+	    android:layout_alignBaseline="@+id/titleYear"
 	    android:background="@drawable/settings"
 	    android:layout_alignParentLeft="true"/>
     

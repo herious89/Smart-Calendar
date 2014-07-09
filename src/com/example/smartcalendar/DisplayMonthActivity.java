@@ -253,7 +253,7 @@ public class DisplayMonthActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			year = yCurrentDisplay;
-	        this.dialog.setMessage("Please wait...");
+	        this.dialog.setMessage("Loading year view. Please wait...");
 	        this.dialog.show();
 	    }
 		

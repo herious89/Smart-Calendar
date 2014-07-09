@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,7 @@ import android.widget.Toast;
 public class YearViewAdapter extends BaseAdapter{
 	
 	private Context mContext;
-	private int mYear;
+	private int mYear, index;
 	private final String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 	private ArrayList<String> items;
 	private ApplicationData data;
@@ -90,7 +92,7 @@ public class YearViewAdapter extends BaseAdapter{
 		items = new ArrayList<String>(data.createMonth(position + 1, mYear, false).size());
 		for (String s : data.createMonth(position + 1, mYear, false))
 			items.add(s);
-
+		index = position + 1;
 		customGridAdapter = new MonthViewAdapter(mContext, R.layout.day_grid_cell, 
 				position + 1, this.mYear, metrics, false);
 		customGridAdapter.notifyDataSetChanged();
@@ -100,7 +102,6 @@ public class YearViewAdapter extends BaseAdapter{
 	
 	static class YearHolder {
 		TextView month;
-		//TextView monthView;
 		GridView monthView;
 		MonthViewAdapter monthAdapter;
 	}
