@@ -14,9 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -34,6 +32,7 @@ public class DisplayMonthActivity extends Activity {
 	
 	public final static String CURRENT_DISPLAY_YEAR = "";
 	public final static String CURRENT_DISPLAY_MONTH = "";
+	public final static String CURRENT_SELECTED_DATE = "";
 	private Button btnAdd, btnMonthSettings;
 	private Calendar calendar;
 	private GridView monthView;
@@ -46,6 +45,7 @@ public class DisplayMonthActivity extends Activity {
 	private DisplayMetrics metrics;
 	private TextView actionBarText;
 	private boolean firstTime = true;
+	private String currentSelectedDate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,10 @@ public class DisplayMonthActivity extends Activity {
 		// Get the current month and year
 		mCurrentDisplay = calendar.get(Calendar.MONTH);
 		yCurrentDisplay = calendar.get(Calendar.YEAR);
+		
+		// Set the current selected date
+		currentSelectedDate = calendar.get(Calendar.DATE) + "-CURRENT-" + months[mCurrentDisplay] 
+				+ "-" + yCurrentDisplay;
 		
 		// Get the current month and year display
 		final ApplicationData data = (ApplicationData) this.getApplicationContext();
@@ -102,6 +106,7 @@ public class DisplayMonthActivity extends Activity {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_LONG).show();
 				Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
+				intent.putExtra(CURRENT_SELECTED_DATE, currentSelectedDate);
 				startActivity(intent);
 			}
 		});
@@ -165,9 +170,6 @@ public class DisplayMonthActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-//				Intent intent = new Intent(getApplicationContext(), DisplayYearActivity.class);
-//				intent.putExtra(CURRENT_DISPLAY_YEAR, yCurrentDisplay);
-//				startActivity(intent);
 				new SwitchToYearView().execute();
 			}
 		});
@@ -187,12 +189,14 @@ public class DisplayMonthActivity extends Activity {
 		monthView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View v, int postion,
+			public void onItemClick(AdapterView<?> parent, View v, int position,
 					long id) {
 				// TODO Auto-generated method stub
 				MonthViewAdapter adapter = (MonthViewAdapter) parent.getAdapter();
-				adapter.setSelectedItem(postion);
+				adapter.setSelectedItem(position);
 				adapter.notifyDataSetChanged();
+				Toast.makeText(getApplicationContext(), adapter.getItem(position), Toast.LENGTH_LONG).show();
+				currentSelectedDate = adapter.getItem(position);
 			}
 			
 		});

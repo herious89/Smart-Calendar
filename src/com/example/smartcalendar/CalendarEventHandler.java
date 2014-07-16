@@ -2,6 +2,7 @@ package com.example.smartcalendar;
 
 import java.util.List;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,14 +13,16 @@ public class CalendarEventHandler extends SQLiteOpenHelper {
 	private final static int DATABASE_VERSION = 1;
 	public static final String TABLE_EVENT = "events";
 	public static final String EVENT_ID = "id";
-	public static final String EVENT_NAME = "event";
+	public static final String EVENT_TITLE = "event";
 	public static final String EVENT_DATE = "date";
+	public static final String EVENT_DESCRIPTION = "des";
 	
 	// SQL statement to create database
 	private final String DATABASE_CREATE = "create table "
-			+ TABLE_EVENT + "(" + EVENT_ID
-			+ " integer primary key autoincrement, " + EVENT_NAME 
-			+ " text not null," + EVENT_DATE + " text not null)"; 
+			+ TABLE_EVENT + "(" + EVENT_ID + " integer primary key autoincrement, " 
+			+ EVENT_TITLE + " text not null," 
+			+ EVENT_DATE + " text not null," 
+			+ EVENT_DESCRIPTION + "text not null)"; 
 	
 	public CalendarEventHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,11 +42,17 @@ public class CalendarEventHandler extends SQLiteOpenHelper {
 	}
 	
 	public void addEvent(CalendarEvent event) {
-		
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(EVENT_TITLE, event.getEventTitle());
+		values.put(EVENT_DATE, event.getEventDate());
+		values.put(EVENT_DESCRIPTION, event.getEventDescription());
+		db.insert(TABLE_EVENT, null, values);
+		db.close();
 	}
 	
 	public CalendarEvent getEvent(int id) {
-		CalendarEvent result = new CalendarEvent();
+		CalendarEvent result = new CalendarEvent(null, null, null);
 		return result;
 	} 
 	
@@ -53,6 +62,8 @@ public class CalendarEventHandler extends SQLiteOpenHelper {
 	}
 	
 	public void deleteEvent(CalendarEvent event) {
-		
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_EVENT, EVENT_ID + " = ?", new String[] {String.valueOf(event.getEventID())});
+		db.close();
 	}
 }

@@ -1,7 +1,60 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.smartcalendar.AddEventActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:context=".SplashActivity" >
+
+    
+    <EditText
+       	android:id="@+id/eventTitle_box"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_centerHorizontal="true"
+		android:layout_marginTop="30dp" 
+		android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp"
+      	android:longClickable="false"
+        android:ems="10"
+        android:hint="Title" 
+        android:textSize="13dp" 
+        android:singleLine="true"
+        android:imeOptions="actionNext"
+        android:background="@drawable/edittext_background"/>
+    
+    <EditText
+       	android:id="@+id/eventDescription_box"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_centerInParent="true"
+      	android:layout_below="@+id/eventTitle_box"
+        android:layout_marginLeft="10dp"  
+        android:layout_marginRight="10dp"       
+      	android:longClickable="false"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="Description" 
+        android:textSize="13sp" 
+        android:background="@drawable/edittext_background"
+        android:layout_marginTop="5dp"/>
+    <TextView 
+        android:id="@+id/eventDateFrom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/eventDescription_box"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"  
+        android:layout_marginRight="10dp"   
+        android:layout_marginTop="20dp"/>
+    <TextView 
+        android:id="@+id/eventDateTo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"  
+        android:layout_marginRight="10dp"   
+        android:layout_below="@+id/eventDateFrom"
+        android:layout_centerHorizontal="true"/>
+    
+
+
+
+</RelativeLayout>

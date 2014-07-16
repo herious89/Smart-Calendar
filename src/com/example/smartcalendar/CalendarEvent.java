@@ -2,8 +2,15 @@ package com.example.smartcalendar;
 
 public class CalendarEvent {
 	private int eventID;
-	private String eventName;
+	private String eventTitle;
 	private String eventDate;
+	private String eventDescription;
+	
+	public CalendarEvent(String title, String date, String des) {
+		this.eventTitle = title;
+		this.eventDate = date;
+		this.eventDescription = des;
+	}
 	
 	public String getEventDate() {
 		return eventDate;
@@ -21,16 +28,24 @@ public class CalendarEvent {
 		this.eventID = id;
 	}
 	
-	public String getEventName() {
-		return eventName;
+	public String getEventTitle() {
+		return eventTitle;
 	}
 	
-	public void setEventName(String name) {
-		this.eventName = name;
+	public void setEventTitle(String title) {
+		this.eventTitle = title;
+	}
+	
+	public void setEventDescription(String des) {
+		this.eventDescription = des;
+	}
+	
+	public String getEventDescription() {
+		return this.eventDescription;
 	}
 	
 	@Override 
 	public String toString() {
-		return eventName;
+		return eventDescription;
 	}
 }
