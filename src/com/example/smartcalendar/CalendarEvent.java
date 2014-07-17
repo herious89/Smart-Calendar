@@ -6,6 +6,7 @@ public class CalendarEvent {
 	private String eventDate;
 	private String eventDescription;
 	
+	
 	public CalendarEvent(String title, String date, String des) {
 		this.eventTitle = title;
 		this.eventDate = date;

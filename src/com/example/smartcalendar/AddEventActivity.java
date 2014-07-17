@@ -1,9 +1,12 @@
 package com.example.smartcalendar;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +18,8 @@ public class AddEventActivity extends Activity {
 	private TextView fromField, toField;
 	private Button btnCancel, btnAdd;
 	private EditText editTitle, editDescription;
+	private CalendarEventHandler handler;
+	private List<CalendarEvent> events;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +27,8 @@ public class AddEventActivity extends Activity {
 		setContentView(R.layout.activity_add_event);
 		
 		
-		final CalendarEventHandler handler = new CalendarEventHandler(this);
+		handler = new CalendarEventHandler(this);
+
 		
 		// Get the current display year from intent
 		Intent intent = getIntent();
@@ -60,8 +66,15 @@ public class AddEventActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				Log.d("Here", currentSelectedDate);
 				handler.addEvent(new CalendarEvent(editTitle.getText().toString(), 
 						currentSelectedDate, editDescription.getText().toString()));
+				events = handler.getAllEvent();
+				for (CalendarEvent e : events) {
+					String log = "Id: " + e.getEventID() + " title: " + e.getEventTitle() 
+							+ " date: " + e.getEventDate() + " des: " + e.getEventDescription();
+					Log.d("Here", log);
+				}
 				finish();
 			}
 		});

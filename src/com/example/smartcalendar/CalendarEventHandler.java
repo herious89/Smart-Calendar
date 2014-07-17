@@ -1,9 +1,11 @@
 package com.example.smartcalendar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -13,16 +15,16 @@ public class CalendarEventHandler extends SQLiteOpenHelper {
 	private final static int DATABASE_VERSION = 1;
 	public static final String TABLE_EVENT = "events";
 	public static final String EVENT_ID = "id";
-	public static final String EVENT_TITLE = "event";
+	public static final String EVENT_TITLE = "title";
 	public static final String EVENT_DATE = "date";
-	public static final String EVENT_DESCRIPTION = "des";
+	public static final String EVENT_DESCRIPTION = "description";
 	
 	// SQL statement to create database
 	private final String DATABASE_CREATE = "create table "
 			+ TABLE_EVENT + "(" + EVENT_ID + " integer primary key autoincrement, " 
-			+ EVENT_TITLE + " text not null," 
-			+ EVENT_DATE + " text not null," 
-			+ EVENT_DESCRIPTION + "text not null)"; 
+			+ EVENT_TITLE + " text not null, " 
+			+ EVENT_DATE + " text not null, " 
+			+ EVENT_DESCRIPTION + " text not null);"; 
 	
 	public CalendarEventHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,7 +59,22 @@ public class CalendarEventHandler extends SQLiteOpenHelper {
 	} 
 	
 	public List<CalendarEvent> getAllEvent() {
-		List<CalendarEvent> result = null;
+		List<CalendarEvent> result = new ArrayList<CalendarEvent>();
+		String selectQuerry = "SELECT * FROM " + TABLE_EVENT;
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuerry, null);
+		
+		if (cursor.moveToFirst()) {
+			do {
+				CalendarEvent event = new CalendarEvent(null, null, null);
+				event.setEventID(Integer.parseInt(cursor.getString(0)));
+				event.setEventTitle(cursor.getString(1));
+				event.setEventDate(cursor.getString(2));
+				event.setEventDescription(cursor.getString(3));
+				result.add(event);
+			} while (cursor.moveToNext());
+		}
+		
 		return result;
 	}
 	

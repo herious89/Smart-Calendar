@@ -6,7 +6,6 @@ package com.example.smartcalendar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -27,8 +26,6 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 
 
 public class DisplayYearActivity extends Activity {
