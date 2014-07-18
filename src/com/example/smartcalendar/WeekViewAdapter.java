@@ -2,9 +2,8 @@ package com.example.smartcalendar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
-import java.util.TreeSet;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -19,33 +18,47 @@ public class WeekViewAdapter extends BaseAdapter{
 	private final int TYPE_ITEM = 0;
 	private final int TYPE_HEADER = 1;
 	private Context mContext;
-	private ArrayList<String> items, events;
-	private TreeSet<Integer> headers;
+	private List<String> items;
+	private List<CalendarEvent> events;
+	private List<Integer> headers;
+	private CalendarEventHandler handler;
 	private ApplicationData data;
-	private int pMonth, pYear;
+	private int pMonth, pYear, pDay;
 	
-	public WeekViewAdapter(Context context, int viewId,int month, int year, boolean viewFlag) {
+	public WeekViewAdapter(Context context, int viewId,int month, int year, int day, boolean viewFlag) {
 		this.mContext = context;
 		this.pMonth = month;
 		this.pYear = year;
-		this.events = new ArrayList<String>();
-		this.headers = new TreeSet<Integer>();
-		events.add("Event #1");
-		events.add("Event #2");
-		events.add("Event #3");
+		this.pDay = day;
+		this.headers = new ArrayList<Integer>();
+		
+		// Call the event database
+		handler = new CalendarEventHandler(mContext);
+		
 		// Get the number of week
 		Calendar calendar = Calendar.getInstance(Locale.getDefault());
+		Log.d("Here", pYear + ", " + pMonth + ", " + calendar.get(Calendar.DAY_OF_MONTH));
+		calendar.set(pYear, pMonth - 1, day);
 		calendar.setMinimalDaysInFirstWeek(1);
 		int week = calendar.get(Calendar.WEEK_OF_MONTH);
 		Log.d("Here", "Week = " + week);
 		data = (ApplicationData) this.mContext.getApplicationContext();
 		items = new ArrayList<String>();
-		for (int i = (week * 7); i < (week * 7 + 7); i++) {
-			Log.d("Here", "*****" + data.createMonth(month, year, viewFlag).get(i));
+		// Add the headers and events
+		for (int i = (week * 7), index = 0; i < (week * 7 + 7); i++, index++) {
 			items.add(data.createMonth(pMonth, pYear, viewFlag).get(i)); 
 			headers.add(items.size() - 1);
-			for (int j = 0; j < events.size(); j++)
-				items.add(events.get(j));
+			// Get the event list for each date of the week
+			events = handler.getEventByDate(data.convertDate(items.get(headers.get(index))));
+			if (events.isEmpty())
+				// Display "No Events"
+				items.add("No Events");
+			else {
+				// Add all events of the day to item list 
+				for (CalendarEvent e : events) {
+					items.add(e.getEventTitle());
+				}
+			}
 		}
 			
 	}

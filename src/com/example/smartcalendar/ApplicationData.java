@@ -9,15 +9,28 @@ import android.util.Log;
 
 
 public class ApplicationData extends Application{
-	private int year = 0, month = 0;
+	private int year = 0, month = 0, day = 0;
 	private boolean flaq = false;
 	
 	public int getYear() { return year; }
 	public int getMonth() { return month; }
+	public int getDay() { return day; }
 	public boolean getFlaq() { return flaq; }
 	public void setYear(int y) { year = y; }
 	public void setMonth(int m) { month = m; }
+	public void setDay(int d) { day = d; }
 	public void setFlaq(boolean f) { flaq = f; }
+	
+	public String convertDate(String d) {
+		String[] date = d.split("-");
+		String result = date[2] + " " + date[0] + ", " + date[3];
+		return result;
+	}
+	
+	public String[] convertRawDate(String d) {
+		String[] result = d.split("-");
+		return result;
+	}
 	
 	public ArrayList<String> createMonth(int pMonth, int pYear, boolean flag) {
 		String[] weekdays = new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};

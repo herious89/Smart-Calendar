@@ -53,16 +53,32 @@ public class CalendarEventHandler extends SQLiteOpenHelper {
 		db.close();
 	}
 	
-	public CalendarEvent getEvent(int id) {
-		CalendarEvent result = new CalendarEvent(null, null, null);
+	public List<CalendarEvent> getEventByDate(String date) {
+		List<CalendarEvent> result = new ArrayList<CalendarEvent>();
+		String selectQuery = "SELECT " + EVENT_TITLE + ", " 
+				+ EVENT_DESCRIPTION + " FROM " + TABLE_EVENT 
+				+ " WHERE " + EVENT_DATE + " = '" + date + "'";
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		
+		if (cursor.moveToFirst()) {
+			do {
+				CalendarEvent event = new CalendarEvent(null, null, null);
+				event.setEventTitle(cursor.getString(0));
+				event.setEventDate(date);
+				event.setEventDescription(cursor.getString(1));
+				result.add(event);
+			} while (cursor.moveToNext());
+		}
+		
 		return result;
 	} 
 	
-	public List<CalendarEvent> getAllEvent() {
+	public List<CalendarEvent> getAllEvents() {
 		List<CalendarEvent> result = new ArrayList<CalendarEvent>();
-		String selectQuerry = "SELECT * FROM " + TABLE_EVENT;
+		String selectQuery = "SELECT * FROM " + TABLE_EVENT;
 		SQLiteDatabase db = this.getWritableDatabase();
-		Cursor cursor = db.rawQuery(selectQuerry, null);
+		Cursor cursor = db.rawQuery(selectQuery, null);
 		
 		if (cursor.moveToFirst()) {
 			do {

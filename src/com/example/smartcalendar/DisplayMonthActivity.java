@@ -41,7 +41,7 @@ public class DisplayMonthActivity extends Activity {
 									"May", "June", "July", "August", 
 									"September", "October", "November", "December"};
 	private final String[] views = {"Year View", "Month View", "Week View"};
-	private int mCurrentDisplay, yCurrentDisplay;
+	private int mCurrentDisplay, yCurrentDisplay, dCurrentDisplay;
 	private DisplayMetrics metrics;
 	private TextView actionBarText;
 	private boolean firstTime = true;
@@ -61,9 +61,10 @@ public class DisplayMonthActivity extends Activity {
 		// Get the grid view 
 		monthView = (GridView) this.findViewById(R.id.monthView);
 		
-		// Get the current month and year
+		// Get the current date
 		mCurrentDisplay = calendar.get(Calendar.MONTH);
 		yCurrentDisplay = calendar.get(Calendar.YEAR);
+		dCurrentDisplay = calendar.get(Calendar.DATE);
 		
 		// Set the current selected date
 		currentSelectedDate = calendar.get(Calendar.DATE) + "-CURRENT-" + months[mCurrentDisplay] 
@@ -98,6 +99,7 @@ public class DisplayMonthActivity extends Activity {
 		actionBarText = (TextView) this.findViewById(R.id.titleDate);
 		actionBarText.setText(months[mCurrentDisplay] + ", " + String.valueOf(yCurrentDisplay));
 		
+		// Initialize and set event for add event button
 		btnAdd = (Button) this.findViewById(R.id.btnAddEvent);
 		btnAdd.setOnClickListener(new View.OnClickListener() {
 			
@@ -106,11 +108,12 @@ public class DisplayMonthActivity extends Activity {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_LONG).show();
 				Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
-				intent.putExtra(CURRENT_SELECTED_DATE, currentSelectedDate);
+				intent.putExtra(CURRENT_SELECTED_DATE, data.convertDate(currentSelectedDate));
 				startActivity(intent);
 			}
 		});
 		
+		// Initialize and set event for setting button
 		btnMonthSettings = (Button) this.findViewById(R.id.btnMonthSettings);
 		btnMonthSettings.setOnClickListener(new View.OnClickListener() {
 			
@@ -142,14 +145,13 @@ public class DisplayMonthActivity extends Activity {
 						// TODO Auto-generated method stub
 						if (selectedItem.get(0) == 0) {
 							Toast.makeText(getApplicationContext(), "Change to yearView", Toast.LENGTH_LONG).show();
-							Intent intent = new Intent(getApplicationContext(), DisplayYearActivity.class);
-							intent.putExtra(CURRENT_DISPLAY_YEAR, yCurrentDisplay);
-							startActivity(intent);
+							new SwitchToYearView().execute();
 						} else if (selectedItem.get(0) == 2) {
 							Toast.makeText(getApplicationContext(), "Change to weekView", Toast.LENGTH_LONG).show();
 							Intent intent = new Intent(getApplicationContext(), DisplayWeekActivity.class);
 							data.setMonth(mCurrentDisplay);
 							data.setYear(yCurrentDisplay);
+							data.setDay(dCurrentDisplay);
 							startActivity(intent);
 						} else
 							Toast.makeText(getApplicationContext(), "Stay at monthView", Toast.LENGTH_LONG).show();
@@ -185,7 +187,7 @@ public class DisplayMonthActivity extends Activity {
 				return swipeDetector.onTouchEvent(event);
 			}
 		});
-		
+		// Set event for each cell of grid view
 		monthView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -197,6 +199,7 @@ public class DisplayMonthActivity extends Activity {
 				adapter.notifyDataSetChanged();
 				Toast.makeText(getApplicationContext(), adapter.getItem(position), Toast.LENGTH_LONG).show();
 				currentSelectedDate = adapter.getItem(position);
+				dCurrentDisplay = Integer.parseInt(data.convertRawDate(adapter.getItem(position))[0]);
 			}
 			
 		});
