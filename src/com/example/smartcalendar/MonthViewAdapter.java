@@ -34,6 +34,8 @@ public class MonthViewAdapter extends BaseAdapter{
 			int pMonth, int pYear, DisplayMetrics metrics, boolean flag) {
 		month = pMonth;
 		year = pYear;
+		
+		// Calculate width and height for correct display
 		this.mContext = context;
 		mDisplayMetrics = metrics;
 		displayWidth = mDisplayMetrics.widthPixels ;
@@ -48,9 +50,13 @@ public class MonthViewAdapter extends BaseAdapter{
 		column_width = displayWidth / 7;
 		column_height = required_height / 7;
 		this.viewFlag = flag;
+		
+		// Receive data from ApplicationData
 		data = (ApplicationData) this.mContext.getApplicationContext();
 		items = new ArrayList<String>(data.createMonth(month, year, viewFlag).size());
-		printMonth(month, year);
+		printMonth(month, year); 
+		
+		// Get the rawDate from main data to highlight
 		if (data.getRawDate() != null) {
 			data.getRawDate()[1] = "DAYS";
 			Log.d("Here", data.getRawDate()[0] + "-" + data.getRawDate()[1] + "-" 
@@ -96,9 +102,11 @@ public class MonthViewAdapter extends BaseAdapter{
 		else
 			holder = (MonthHolder) row.getTag();
 		
+		// Get data for displaying correct color and format
 		String[] day_color = items.get(position).split("-");
 		String theDay = day_color[0];
 		
+		// The current cell holds the date for previous or next month
 		if (day_color[1].equals("NEXT") || day_color[1].equals("PREV")) {	
 			holder.day.setTextColor(Color.LTGRAY);
 			holder.day.setText(theDay);
@@ -110,6 +118,7 @@ public class MonthViewAdapter extends BaseAdapter{
 			}
         }
 		
+		// the current cell holds the date of the current month
 		if (day_color[1].equals("DAYS")) {
 			if (position % 7 == 0 || position % 7 == 6)
 				holder.day.setTextColor(Color.RED);
@@ -125,6 +134,7 @@ public class MonthViewAdapter extends BaseAdapter{
 
         }
 		
+		// The current cell holds the current day
 		if (day_color[1].equals("CURRENT")) {
 			holder.day.setTextColor(Color.BLUE);
 			holder.day.setText(theDay);
@@ -138,6 +148,7 @@ public class MonthViewAdapter extends BaseAdapter{
 			}
         }
 		
+		// The current cell holds the week days
 		if (day_color[1].equals("WEEKDAYS")) {
 			holder.day.setText(theDay); 
 			if (day_color[0].equals("S"))
@@ -154,7 +165,8 @@ public class MonthViewAdapter extends BaseAdapter{
 			}
         }
 		
-		if (selectedItem == position && !day_color[1].equals("WEEKDAYS"))
+		// Highlight the current selected cell 
+		if (selectedItem == position && !day_color[1].equals("WEEKDAYS") && this.viewFlag)
 			holder.day.setBackgroundColor(Color.parseColor("#66CCFF"));
 		
 		return row;

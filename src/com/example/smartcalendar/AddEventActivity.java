@@ -82,5 +82,8 @@ public class AddEventActivity extends Activity {
 		});
 	}
 
-	
+	@Override
+    public void onBackPressed() {
+		finish();
+    }
 }

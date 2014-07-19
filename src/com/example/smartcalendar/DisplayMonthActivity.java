@@ -44,7 +44,6 @@ public class DisplayMonthActivity extends Activity {
 	private int mCurrentDisplay, yCurrentDisplay, dCurrentDisplay;
 	private DisplayMetrics metrics;
 	private TextView actionBarText;
-	private boolean firstTime = true;
 	private String currentSelectedDate;
 
 	@Override
@@ -72,13 +71,14 @@ public class DisplayMonthActivity extends Activity {
 		
 		// Get the current month and year display
 		final ApplicationData data = (ApplicationData) this.getApplicationContext();
-		data.setDay(dCurrentDisplay);
-		data.setMonth(mCurrentDisplay);
-		data.setYear(yCurrentDisplay);
 		if (data.getFlaq()) {
 			mCurrentDisplay = data.getMonth();
 			yCurrentDisplay = data.getYear();
 		}
+		// Set the current display date to the main data
+		data.setDay(dCurrentDisplay);
+		data.setMonth(mCurrentDisplay);
+		data.setYear(yCurrentDisplay);
 		
 		// get display metrics
 		metrics = new DisplayMetrics();
@@ -189,9 +189,9 @@ public class DisplayMonthActivity extends Activity {
 					long id) {
 				// TODO Auto-generated method stub
 				MonthViewAdapter adapter = (MonthViewAdapter) parent.getAdapter();
-				adapter.setSelectedItem(position);
+				adapter.setSelectedItem(position); // Highlight the current selected item
 				adapter.notifyDataSetChanged();
-				data.setRawDate(adapter.getItem(position).split("-"));
+				data.setRawDate(adapter.getItem(position).split("-")); // Set the main data's rawDate
 				Toast.makeText(getApplicationContext(), adapter.getItem(position), Toast.LENGTH_LONG).show();
 				currentSelectedDate = adapter.getItem(position);
 				if (adapter.getItem(position).split("-")[1].equals("PREV")) {
@@ -201,6 +201,7 @@ public class DisplayMonthActivity extends Activity {
 						mCurrentDisplay = 11;
 					} else
 						mCurrentDisplay--;
+					// Go the previous month
 					setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
 				} else if (adapter.getItem(position).split("-")[1].equals("NEXT")) {
 					dCurrentDisplay = Integer.parseInt(data.convertRawDate(adapter.getItem(position))[0]);
@@ -209,6 +210,7 @@ public class DisplayMonthActivity extends Activity {
 						mCurrentDisplay = 0;
 					} else
 						mCurrentDisplay++;
+					// Go the the next month
 					setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
 				} else
 					dCurrentDisplay = Integer.parseInt(data.convertRawDate(adapter.getItem(position))[0]);
@@ -217,8 +219,16 @@ public class DisplayMonthActivity extends Activity {
 		});
 	}	
 	
+	@Override
+    public void onBackPressed() {
+		finish();
+    }
 	
-	
+	/**
+	 * The setGridCellAdapterToDate update the view of the current month
+	 * @param month The current month
+	 * @param year The current year
+	 */
 	private void setGridCellAdapterToDate(int month, int year) {
 		customGridAdapter = new MonthViewAdapter(getApplicationContext(), R.layout.day_grid_cell, 
 				month + 1, year, metrics, true);

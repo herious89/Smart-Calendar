@@ -6,6 +6,7 @@ package com.example.smartcalendar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -135,6 +136,18 @@ public class DisplayYearActivity extends Activity {
 			}
 		});
 	}
+	
+	@Override
+    public void onBackPressed() {
+		super.onBackPressed();
+		Intent intent = new Intent(getApplicationContext(), DisplayMonthActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		ApplicationData data = (ApplicationData) getApplicationContext();
+		data.setFlaq(true);
+		data.setMonth(0);
+		data.setYear(yCurrentDisplay);
+		startActivity(intent);
+    }
 	
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev){

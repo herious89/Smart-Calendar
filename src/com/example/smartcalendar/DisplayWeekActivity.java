@@ -13,10 +13,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,13 +35,15 @@ public class DisplayWeekActivity extends Activity {
 	private final String[] views = {"Year View", "Month View", "Week View"};
 	private ApplicationData data;
 	private Calendar calendar;
+	private int totalWeeks;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_week);
 		
-		
+		// Object for gesture detection
+		final GestureDetector swipeDetector = new GestureDetector(this, new SwipeGesture(this));
 		
 		// Receive application's data
 		data = (ApplicationData) this.getApplicationContext();
@@ -51,7 +55,7 @@ public class DisplayWeekActivity extends Activity {
 		calendar = Calendar.getInstance();
 		calendar.set(yCurrentDisplay, mCurrentDisplay, dCurrentDisplay);
 		wCurrentDisplay =  calendar.get(Calendar.WEEK_OF_MONTH);
-        int totalWeeks = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
+        totalWeeks = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
         Log.d("Here: ", "Number of weeks: " + totalWeeks);
 		// Get the custom action bar
 		ActionBar actionBarTop = getActionBar();
@@ -113,6 +117,7 @@ public class DisplayWeekActivity extends Activity {
 						} else if (selectedItem.get(0) == 1) {
 							Toast.makeText(getApplicationContext(), "Change to monthView", Toast.LENGTH_LONG).show();
 							Intent intent = new Intent(getApplicationContext(), DisplayMonthActivity.class);
+							data.setDay(dCurrentDisplay);
 							data.setMonth(mCurrentDisplay);
 							data.setYear(yCurrentDisplay);
 							data.setFlaq(true);
@@ -135,6 +140,12 @@ public class DisplayWeekActivity extends Activity {
 				mCurrentDisplay + 1, yCurrentDisplay, dCurrentDisplay, wCurrentDisplay, true);
 		customListAdapter.notifyDataSetChanged();
 		weekView.setAdapter(customListAdapter);
+		weekView.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return swipeDetector.onTouchEvent(event);
+			}
+		});
 	}
 	
 	private void setListAdapterToDate(int month, int year, int day, int week) {
@@ -143,20 +154,20 @@ public class DisplayWeekActivity extends Activity {
 		customListAdapter.notifyDataSetChanged();
 		weekView.setAdapter(customListAdapter);
 		calendar.set(month, year, day);
-		actionBarText.setText(data.displayWeekPeriod(month + 1, year, 
-				calendar.get(Calendar.WEEK_OF_MONTH)));
+		actionBarText.setText(data.displayWeekPeriod(month + 1, year, week));
     }
 	
 	@Override
     public void onBackPressed() {
-            super.onBackPressed();
-            Intent intent = new Intent(getApplicationContext(), DisplayMonthActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			ApplicationData data = (ApplicationData) getApplicationContext();
-			data.setFlaq(true);
-			data.setMonth(mCurrentDisplay);
-			data.setYear(yCurrentDisplay);
-			startActivity(intent);
+		super.onBackPressed();
+		Intent intent = new Intent(getApplicationContext(), DisplayMonthActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		ApplicationData data = (ApplicationData) getApplicationContext();
+		data.setFlaq(true);
+		data.setDay(dCurrentDisplay);
+		data.setMonth(mCurrentDisplay);
+		data.setYear(yCurrentDisplay);
+		startActivity(intent);
     }
 	
 	private class SwitchToYearView extends AsyncTask<Integer, Void, Void> {
@@ -200,21 +211,45 @@ public class DisplayWeekActivity extends Activity {
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 	        if (e1.getX() - e2.getX() > swipeMinDistance && Math.abs(velocityX) > swipeThresholdVelocity) {
 	            Toast.makeText(getApplicationContext(), "Next", Toast.LENGTH_SHORT).show();
-	            if(mCurrentDisplay == 11) {
-					mCurrentDisplay = 0;
-					yCurrentDisplay++;
-				}
-				else
-					mCurrentDisplay++;
+	            if (wCurrentDisplay < totalWeeks)
+	            	wCurrentDisplay++;
+	            else {
+	            	// Check whether the current week contains day(s) from next month
+	            	if (customListAdapter.getFlag())
+	            		wCurrentDisplay = 2;
+	            	else
+	            		wCurrentDisplay = 1;
+	            	
+	            	// Go to next year
+	            	if(mCurrentDisplay == 11) {
+						mCurrentDisplay = 0;
+						yCurrentDisplay++;
+					}
+					else
+						mCurrentDisplay++;
+	            }
+	            Log.d("Here", wCurrentDisplay + " " + totalWeeks + " " + mCurrentDisplay);
 				setListAdapterToDate(mCurrentDisplay, yCurrentDisplay, dCurrentDisplay, wCurrentDisplay);
 	        }  else if (e2.getX() - e1.getX() > swipeMinDistance && Math.abs(velocityX) > swipeThresholdVelocity) {
 	            Toast.makeText(getApplicationContext(), "Prev", Toast.LENGTH_SHORT).show();
-	            if(mCurrentDisplay == 0) {
-					mCurrentDisplay = 11;
-					yCurrentDisplay--;
-				}
-				else 
-					mCurrentDisplay--;
+	            if (wCurrentDisplay > 1) 
+	            	wCurrentDisplay--;
+	            else {
+	            	// Check whether the current week contains day(s) from previous month
+	            	if (customListAdapter.getFlag())
+	            		wCurrentDisplay = 4;
+	            	else
+	            		wCurrentDisplay = 5;
+	            	
+	            	// Go to previous year
+	            	if(mCurrentDisplay == 0) {
+	            		mCurrentDisplay = 11;
+	            		yCurrentDisplay--;
+	            	}
+	            	else 
+	            		mCurrentDisplay--;
+	            }
+	            Log.d("Here", wCurrentDisplay + " " + totalWeeks + " " + mCurrentDisplay);
 	            setListAdapterToDate(mCurrentDisplay, yCurrentDisplay, dCurrentDisplay, wCurrentDisplay);
 	        }
 	        return false;
