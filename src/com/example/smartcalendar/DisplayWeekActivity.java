@@ -1,16 +1,22 @@
 package com.example.smartcalendar;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,29 +28,40 @@ public class DisplayWeekActivity extends Activity {
 	private Button btnWeekSettings;
 	private ListView weekView;
 	private WeekViewAdapter customListAdapter;
-	private int yCurrentDisplay, mCurrentDisplay, dCurrentDisplay;
+	private int yCurrentDisplay, mCurrentDisplay, dCurrentDisplay, wCurrentDisplay;
 	private TextView actionBarText;
 	private final String[] views = {"Year View", "Month View", "Week View"};
+	private ApplicationData data;
+	private Calendar calendar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_week);
 		
+		
+		
 		// Receive application's data
-		final ApplicationData data = (ApplicationData) this.getApplicationContext();
+		data = (ApplicationData) this.getApplicationContext();
 		mCurrentDisplay = data.getMonth();
 		yCurrentDisplay = data.getYear();
 		dCurrentDisplay = data.getDay();
 		
+		// Get the current week number
+		calendar = Calendar.getInstance();
+		calendar.set(yCurrentDisplay, mCurrentDisplay, dCurrentDisplay);
+		wCurrentDisplay =  calendar.get(Calendar.WEEK_OF_MONTH);
+        int totalWeeks = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
+        Log.d("Here: ", "Number of weeks: " + totalWeeks);
 		// Get the custom action bar
 		ActionBar actionBarTop = getActionBar();
 		actionBarTop.setCustomView(R.layout.actionbar_top_week);
 		actionBarTop.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		
+		
 		// Set the action bar's text and click event
 		actionBarText = (TextView) this.findViewById(R.id.weeklyEvent);
-		actionBarText.setText("Weekly Event");
+		actionBarText.setText(data.displayWeekPeriod(mCurrentDisplay + 1, yCurrentDisplay, wCurrentDisplay));
 		actionBarText.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -115,11 +132,33 @@ public class DisplayWeekActivity extends Activity {
 		// Create and set the custom view
 		weekView = (ListView) this.findViewById(R.id.weekView);
 		customListAdapter = new WeekViewAdapter(getApplicationContext(), R.id.weekView, 
-				mCurrentDisplay + 1, yCurrentDisplay, dCurrentDisplay, true);
+				mCurrentDisplay + 1, yCurrentDisplay, dCurrentDisplay, wCurrentDisplay, true);
 		customListAdapter.notifyDataSetChanged();
 		weekView.setAdapter(customListAdapter);
 	}
-
+	
+	private void setListAdapterToDate(int month, int year, int day, int week) {
+		customListAdapter = new WeekViewAdapter(getApplicationContext(), R.id.weekView, 
+				month + 1, year, day, week, true);
+		customListAdapter.notifyDataSetChanged();
+		weekView.setAdapter(customListAdapter);
+		calendar.set(month, year, day);
+		actionBarText.setText(data.displayWeekPeriod(month + 1, year, 
+				calendar.get(Calendar.WEEK_OF_MONTH)));
+    }
+	
+	@Override
+    public void onBackPressed() {
+            super.onBackPressed();
+            Intent intent = new Intent(getApplicationContext(), DisplayMonthActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			ApplicationData data = (ApplicationData) getApplicationContext();
+			data.setFlaq(true);
+			data.setMonth(mCurrentDisplay);
+			data.setYear(yCurrentDisplay);
+			startActivity(intent);
+    }
+	
 	private class SwitchToYearView extends AsyncTask<Integer, Void, Void> {
 		
 		private int year;
@@ -147,5 +186,38 @@ public class DisplayWeekActivity extends Activity {
 		}		
 	}
 	
+	private final class SwipeGesture extends SimpleOnGestureListener {
+		private final int swipeMinDistance;
+		private final int swipeThresholdVelocity;
 
+		public SwipeGesture(Context context) {
+			final ViewConfiguration viewConfig = ViewConfiguration.get(context);
+			swipeMinDistance = viewConfig.getScaledTouchSlop();
+			swipeThresholdVelocity = viewConfig.getScaledMinimumFlingVelocity();
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+	        if (e1.getX() - e2.getX() > swipeMinDistance && Math.abs(velocityX) > swipeThresholdVelocity) {
+	            Toast.makeText(getApplicationContext(), "Next", Toast.LENGTH_SHORT).show();
+	            if(mCurrentDisplay == 11) {
+					mCurrentDisplay = 0;
+					yCurrentDisplay++;
+				}
+				else
+					mCurrentDisplay++;
+				setListAdapterToDate(mCurrentDisplay, yCurrentDisplay, dCurrentDisplay, wCurrentDisplay);
+	        }  else if (e2.getX() - e1.getX() > swipeMinDistance && Math.abs(velocityX) > swipeThresholdVelocity) {
+	            Toast.makeText(getApplicationContext(), "Prev", Toast.LENGTH_SHORT).show();
+	            if(mCurrentDisplay == 0) {
+					mCurrentDisplay = 11;
+					yCurrentDisplay--;
+				}
+				else 
+					mCurrentDisplay--;
+	            setListAdapterToDate(mCurrentDisplay, yCurrentDisplay, dCurrentDisplay, wCurrentDisplay);
+	        }
+	        return false;
+		}
+	}
 }

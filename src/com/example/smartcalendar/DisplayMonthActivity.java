@@ -72,6 +72,9 @@ public class DisplayMonthActivity extends Activity {
 		
 		// Get the current month and year display
 		final ApplicationData data = (ApplicationData) this.getApplicationContext();
+		data.setDay(dCurrentDisplay);
+		data.setMonth(mCurrentDisplay);
+		data.setYear(yCurrentDisplay);
 		if (data.getFlaq()) {
 			mCurrentDisplay = data.getMonth();
 			yCurrentDisplay = data.getYear();
@@ -80,16 +83,7 @@ public class DisplayMonthActivity extends Activity {
 		// get display metrics
 		metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		
-		if (!firstTime) {
-			Intent intent = getIntent();
-			mCurrentDisplay = intent.getIntExtra(YearViewAdapter.SELECTED_MONTH, 
-					calendar.get(Calendar.MONTH));
-			yCurrentDisplay = intent.getIntExtra(YearViewAdapter.SELECTED_YEAR,
-					calendar.get(Calendar.YEAR));
-			setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
-		} 
-		
+			
 		// Set the custom action bar
 		ActionBar actionBarTop = getActionBar();
 		actionBarTop.setCustomView(R.layout.actionbar_top_month);
@@ -108,7 +102,7 @@ public class DisplayMonthActivity extends Activity {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_LONG).show();
 				Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
-				intent.putExtra(CURRENT_SELECTED_DATE, data.convertDate(currentSelectedDate));
+				intent.putExtra(CURRENT_SELECTED_DATE, data.convertDate(currentSelectedDate, false));
 				startActivity(intent);
 			}
 		});
@@ -197,9 +191,27 @@ public class DisplayMonthActivity extends Activity {
 				MonthViewAdapter adapter = (MonthViewAdapter) parent.getAdapter();
 				adapter.setSelectedItem(position);
 				adapter.notifyDataSetChanged();
+				data.setRawDate(adapter.getItem(position).split("-"));
 				Toast.makeText(getApplicationContext(), adapter.getItem(position), Toast.LENGTH_LONG).show();
 				currentSelectedDate = adapter.getItem(position);
-				dCurrentDisplay = Integer.parseInt(data.convertRawDate(adapter.getItem(position))[0]);
+				if (adapter.getItem(position).split("-")[1].equals("PREV")) {
+					dCurrentDisplay = Integer.parseInt(data.convertRawDate(adapter.getItem(position))[0]);
+					if (mCurrentDisplay == 0) {
+						yCurrentDisplay--;
+						mCurrentDisplay = 11;
+					} else
+						mCurrentDisplay--;
+					setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
+				} else if (adapter.getItem(position).split("-")[1].equals("NEXT")) {
+					dCurrentDisplay = Integer.parseInt(data.convertRawDate(adapter.getItem(position))[0]);
+					if (mCurrentDisplay == 11) {
+						yCurrentDisplay++;
+						mCurrentDisplay = 0;
+					} else
+						mCurrentDisplay++;
+					setGridCellAdapterToDate(mCurrentDisplay, yCurrentDisplay);
+				} else
+					dCurrentDisplay = Integer.parseInt(data.convertRawDate(adapter.getItem(position))[0]);
 			}
 			
 		});
@@ -207,8 +219,7 @@ public class DisplayMonthActivity extends Activity {
 	
 	
 	
-	private void setGridCellAdapterToDate(int month, int year)
-    {
+	private void setGridCellAdapterToDate(int month, int year) {
 		customGridAdapter = new MonthViewAdapter(getApplicationContext(), R.layout.day_grid_cell, 
 				month + 1, year, metrics, true);
 		calendar.set(year, month, calendar.get(Calendar.DAY_OF_MONTH));

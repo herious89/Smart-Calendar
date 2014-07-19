@@ -1,6 +1,7 @@
 package com.example.smartcalendar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -10,8 +11,10 @@ import android.util.Log;
 
 public class ApplicationData extends Application{
 	private int year = 0, month = 0, day = 0;
-	private boolean flaq = false;
-	
+	private String[] rawDate;
+	private boolean flaq = false;	
+	public void setRawDate(String[] rD) { rawDate = rD; }
+	public String[] getRawDate() { return rawDate; }
 	public int getYear() { return year; }
 	public int getMonth() { return month; }
 	public int getDay() { return day; }
@@ -21,14 +24,24 @@ public class ApplicationData extends Application{
 	public void setDay(int d) { day = d; }
 	public void setFlaq(boolean f) { flaq = f; }
 	
-	public String convertDate(String d) {
+	public String convertDate(String d, boolean shortFlag) {
+		String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 		String[] date = d.split("-");
 		String result = date[2] + " " + date[0] + ", " + date[3];
+		if (shortFlag) {
+			result = (Arrays.asList(months).indexOf(date[2]) + 1) + "/" + date[0] + "/" + date[3];
+		}
 		return result;
 	}
 	
 	public String[] convertRawDate(String d) {
 		String[] result = d.split("-");
+		return result;
+	}
+	
+	public String displayWeekPeriod(int m, int y, int w) {
+		ArrayList<String> temp = createMonth(m, y, true); 
+		String result = convertDate(temp.get(w * 7), true) + " - " + convertDate(temp.get(w * 7 + 6), true);
 		return result;
 	}
 	
@@ -42,6 +55,9 @@ public class ApplicationData extends Application{
 		int nextMonth = 0;		
 		int currentMonth = pMonth - 1;
 		int daysInMonth = daysOfMonth[currentMonth];
+		int currentYear = pYear;
+		int prevYear = pYear - 1;
+		int nextYear = pYear + 1;
 		ArrayList<String> items = new ArrayList<String>();
 		Calendar calendar = Calendar.getInstance();
 		int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
@@ -82,8 +98,13 @@ public class ApplicationData extends Application{
 		
 		// Calculate trailing spaces 
 		for (int i = 0; i < trailingSpaces; i++) {
-			items.add(String.valueOf(daysInPrevMonth - trailingSpaces + 1 + i) + "-PREV"
-					+ "-" + months[prevMonth] + "-" + pYear);
+			if (prevMonth == 11) {
+				items.add(String.valueOf(daysInPrevMonth - trailingSpaces + 1 + i) + "-PREV"
+						+ "-" + months[prevMonth] + "-" + prevYear);
+			}
+			else
+				items.add(String.valueOf(daysInPrevMonth - trailingSpaces + 1 + i) + "-PREV"
+						+ "-" + months[prevMonth] + "-" + currentYear);
 		}
 		
 		
@@ -93,19 +114,24 @@ public class ApplicationData extends Application{
 			if (i == currentDayOfMonth && pYear == calendar.get(Calendar.YEAR)
 					&& currentMonth == calendar.get(Calendar.MONTH)) {
 				items.add(String.valueOf(i) + "-CURRENT" + "-" +
-						months[currentMonth] + "-" + pYear);
+						months[currentMonth] + "-" + currentYear);
 			}
 			else  
 				items.add(String.valueOf(i) + "-DAYS" + "-" +
-						months[currentMonth] + "-" + pYear);
+						months[currentMonth] + "-" + currentYear);
 			if (currentMonth == 8)
 				Log.d("Here", "****" + items.get(i));
 		}
 		
 		// Calculate number of days to display for the next month
-		for (int i = 0; i < items.size() % 7; i++) 
-			items.add(String.valueOf(i + 1) + "-NEXT" + "-" + 
-					months[nextMonth] + "-" +pYear);
+		for (int i = 0; i < items.size() % 7; i++) {
+			if (currentMonth == 11) 
+				items.add(String.valueOf(i + 1) + "-NEXT" + "-" + 
+						months[nextMonth] + "-" + nextYear);
+			else
+				items.add(String.valueOf(i + 1) + "-NEXT" + "-" + 
+						months[nextMonth] + "-" + currentYear);
+		}
 		return items;
 	}
 }

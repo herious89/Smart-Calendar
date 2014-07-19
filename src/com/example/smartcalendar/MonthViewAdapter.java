@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,14 +45,24 @@ public class MonthViewAdapter extends BaseAdapter{
 		for(int i=0;i<arrSize;i++){
 			str_arr[i] = String.valueOf(i);
 		}
-		selectedItem = 0;
-		prevSelectedItem = -1;
 		column_width = displayWidth / 7;
 		column_height = required_height / 7;
 		this.viewFlag = flag;
 		data = (ApplicationData) this.mContext.getApplicationContext();
 		items = new ArrayList<String>(data.createMonth(month, year, viewFlag).size());
 		printMonth(month, year);
+		if (data.getRawDate() != null) {
+			data.getRawDate()[1] = "DAYS";
+			Log.d("Here", data.getRawDate()[0] + "-" + data.getRawDate()[1] + "-" 
+					+ data.getRawDate()[2] + "-" + data.getRawDate()[3]);
+			String temp = data.getRawDate()[0] + "-" + data.getRawDate()[1] + "-" 
+					+ data.getRawDate()[2] + "-" +data.getRawDate()[3];
+			Log.d("Here", items.indexOf(temp) + "");
+			setSelectedItem(items.indexOf(temp));
+		} else {
+			selectedItem = 0;
+			prevSelectedItem = -1;
+		}
 	}
 	
 	public static int getStatusBarHeight(Context context) {

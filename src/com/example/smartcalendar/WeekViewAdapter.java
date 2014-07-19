@@ -23,13 +23,14 @@ public class WeekViewAdapter extends BaseAdapter{
 	private List<Integer> headers;
 	private CalendarEventHandler handler;
 	private ApplicationData data;
-	private int pMonth, pYear, pDay;
+	private int pMonth, pYear, pDay, pWeek;
 	
-	public WeekViewAdapter(Context context, int viewId,int month, int year, int day, boolean viewFlag) {
+	public WeekViewAdapter(Context context, int viewId,int month, int year, int day, int week, boolean viewFlag) {
 		this.mContext = context;
 		this.pMonth = month;
 		this.pYear = year;
 		this.pDay = day;
+		this.pWeek = week;
 		this.headers = new ArrayList<Integer>();
 		
 		// Call the event database
@@ -38,18 +39,18 @@ public class WeekViewAdapter extends BaseAdapter{
 		// Get the number of week
 		Calendar calendar = Calendar.getInstance(Locale.getDefault());
 		Log.d("Here", pYear + ", " + pMonth + ", " + calendar.get(Calendar.DAY_OF_MONTH));
-		calendar.set(pYear, pMonth - 1, day);
+		calendar.set(pYear, pMonth - 1, pDay);
 		calendar.setMinimalDaysInFirstWeek(1);
-		int week = calendar.get(Calendar.WEEK_OF_MONTH);
+		pWeek = calendar.get(Calendar.WEEK_OF_MONTH);
 		Log.d("Here", "Week = " + week);
 		data = (ApplicationData) this.mContext.getApplicationContext();
 		items = new ArrayList<String>();
 		// Add the headers and events
-		for (int i = (week * 7), index = 0; i < (week * 7 + 7); i++, index++) {
+		for (int i = (pWeek * 7), index = 0; i < (pWeek * 7 + 7); i++, index++) {
 			items.add(data.createMonth(pMonth, pYear, viewFlag).get(i)); 
 			headers.add(items.size() - 1);
 			// Get the event list for each date of the week
-			events = handler.getEventByDate(data.convertDate(items.get(headers.get(index))));
+			events = handler.getEventByDate(data.convertDate(items.get(headers.get(index)), false));
 			if (events.isEmpty())
 				// Display "No Events"
 				items.add("No Events");
