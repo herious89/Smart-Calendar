@@ -1,18 +1,18 @@
 package com.example.smartcalendar;
 
 import java.util.List;
-
-import android.app.Activity;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class AddEventActivity extends Activity {
+public class AddEventActivity extends FragmentActivity {
 	
 	private String currentSelectedDate;
 	private TextView fromField, toField;
@@ -43,6 +43,15 @@ public class AddEventActivity extends Activity {
 		fromField.setText("From: " + currentSelectedDate);
 		toField = (TextView) this.findViewById(R.id.eventDateTo);
 		toField.setText("To: " + currentSelectedDate);
+		
+		fromField.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				showDatePickerDialog(v);
+			}
+		});
 		
 		// Set the title and description text box
 		editTitle = (EditText) this.findViewById(R.id.eventTitle_box);
@@ -86,4 +95,9 @@ public class AddEventActivity extends Activity {
     public void onBackPressed() {
 		finish();
     }
+	
+	public void showDatePickerDialog(View v) {
+	    DialogFragment newFragment = new DatePickerFragment();
+	    newFragment.show(getSupportFragmentManager(), "datePicker");
+	}
 }
