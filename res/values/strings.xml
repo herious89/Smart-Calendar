@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Smart Calendar</string>
-    <string name="title_activity_splash">SplashActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="buildNumber">Build #0.7</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="buildNumber">Build #0.8</string>
     <string name="splash_desc">Splash Screen</string>
 
     <!-- Colors -->
@@ -35,7 +32,10 @@
     <color name="Mint">#C5E3BF</color>
     <color name="purple">#690696</color>
     <color name="magenta">#FF00FF</color>
-
+    <color name="lightblue3">#d4e0e3</color>
+	
+  	<string name="title_activity_main">MainActivity</string>
+ 	<string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_display_year">DisplayYearActivity</string>
     <string name="title_activity_add_event">AddEventActivity</string>
     <string name="title_activity_display_week">DisplayWeekActivity</string>

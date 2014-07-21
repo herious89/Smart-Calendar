@@ -27,6 +27,7 @@ public final class R {
         public static final int gray=0x7f070003;
         public static final int lightblue1=0x7f070008;
         public static final int lightblue2=0x7f070009;
+        public static final int lightblue3=0x7f070019;
         public static final int listViewBg=0x7f07000d;
         public static final int magenta=0x7f070018;
         public static final int purewhite=0x7f070002;
@@ -64,46 +65,49 @@ public final class R {
         public static final int background_footer_menu=0x7f020006;
         public static final int border=0x7f020007;
         public static final int cancel=0x7f020008;
-        public static final int edittext_background=0x7f020009;
-        public static final int ic_launcher=0x7f02000a;
-        public static final int newtextborder=0x7f02000b;
-        public static final int next_n=0x7f02000c;
-        public static final int next_p=0x7f02000d;
-        public static final int nextbox=0x7f02000e;
-        public static final int normbox=0x7f02000f;
-        public static final int normbox_n=0x7f020010;
-        public static final int normbox_p=0x7f020011;
-        public static final int settings=0x7f020012;
-        public static final int splash=0x7f020013;
-        public static final int textborder=0x7f020014;
+        public static final int custom_btn_beige=0x7f020009;
+        public static final int edittext_background=0x7f02000a;
+        public static final int ic_launcher=0x7f02000b;
+        public static final int newtextborder=0x7f02000c;
+        public static final int next_n=0x7f02000d;
+        public static final int next_p=0x7f02000e;
+        public static final int nextbox=0x7f02000f;
+        public static final int normbox=0x7f020010;
+        public static final int normbox_n=0x7f020011;
+        public static final int normbox_p=0x7f020012;
+        public static final int settings=0x7f020013;
+        public static final int splash=0x7f020014;
+        public static final int textborder=0x7f020015;
     }
     public static final class id {
-        public static final int DateField=0x7f0a0015;
-        public static final int EventList=0x7f0a0016;
-        public static final int Splash=0x7f0a0011;
-        public static final int action_settings=0x7f0a0019;
-        public static final int app_version=0x7f0a0012;
+        public static final int DateField=0x7f0a0017;
+        public static final int EventList=0x7f0a0018;
+        public static final int Splash=0x7f0a0013;
+        public static final int action_settings=0x7f0a001b;
+        public static final int app_version=0x7f0a0014;
         public static final int btnAddEvent=0x7f0a0002;
         public static final int btnCancel=0x7f0a0000;
+        public static final int btnDateFrom=0x7f0a000b;
+        public static final int btnDateTo=0x7f0a000d;
+        public static final int btnFromTime=0x7f0a000c;
         public static final int btnMonthSettings=0x7f0a0003;
+        public static final int btnToTime=0x7f0a000e;
         public static final int btnWeekSettings=0x7f0a0005;
         public static final int btnYearSettings=0x7f0a0008;
-        public static final int container=0x7f0a000d;
-        public static final int eventDateFrom=0x7f0a000b;
-        public static final int eventDateTo=0x7f0a000c;
+        public static final int container=0x7f0a000f;
         public static final int eventDescription_box=0x7f0a000a;
         public static final int eventTitle_box=0x7f0a0009;
-        public static final int layout=0x7f0a0013;
-        public static final int monthName=0x7f0a0017;
-        public static final int monthView=0x7f0a000e;
-        public static final int textDate=0x7f0a0014;
+        public static final int layout=0x7f0a0015;
+        public static final int monthName=0x7f0a0019;
+        public static final int monthView=0x7f0a0010;
+        public static final int textDate=0x7f0a0016;
         public static final int title=0x7f0a0001;
         public static final int titleDate=0x7f0a0004;
         public static final int titleYear=0x7f0a0007;
-        public static final int weekView=0x7f0a000f;
+        public static final int weekView=0x7f0a0011;
         public static final int weeklyEvent=0x7f0a0006;
-        public static final int yearView=0x7f0a0010;
-        public static final int yearlyMonthView=0x7f0a0018;
+        public static final int yearView=0x7f0a0012;
+        public static final int yearlyMonthView=0x7f0a001a;
     }
     public static final class layout {
         public static final int actionbar_top_add_events=0x7f030000;
@@ -132,16 +136,16 @@ public final class R {
         public static final int splash=0x7f090004;
     }
     public static final class string {
-        public static final int action_settings=0x7f060003;
+        public static final int action_settings=0x7f060002;
         public static final int app_name=0x7f060000;
-        public static final int buildNumber=0x7f060004;
-        public static final int hello_world=0x7f060002;
-        public static final int splash_desc=0x7f060006;
+        public static final int buildNumber=0x7f060003;
+        public static final int hello_world=0x7f060001;
+        public static final int splash_desc=0x7f060004;
         public static final int title_activity_add_event=0x7f060008;
         public static final int title_activity_display_week=0x7f060009;
         public static final int title_activity_display_year=0x7f060007;
         public static final int title_activity_main=0x7f060005;
-        public static final int title_activity_splash=0x7f060001;
+        public static final int title_activity_splash=0x7f060006;
     }
     public static final class style {
         /** 
@@ -170,5 +174,8 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f080001;
+        /**  Theme for button 
+         */
+        public static final int btnStyleBeige=0x7f080002;
     }
 }

@@ -37,11 +37,13 @@
         </activity>
         <activity
             android:name="com.example.smartcalendar.AddEventActivity"
-            android:label="@string/title_activity_add_event" >
+            android:label="@string/title_activity_add_event" 
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.smartcalendar.DisplayWeekActivity"
-            android:label="@string/title_activity_display_week" >
+            android:label="@string/title_activity_display_week" 
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

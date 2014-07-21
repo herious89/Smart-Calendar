@@ -1,6 +1,7 @@
 package com.example.smartcalendar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -75,6 +76,7 @@ public class DisplayMonthActivity extends Activity {
 			mCurrentDisplay = data.getMonth();
 			yCurrentDisplay = data.getYear();
 		}
+		
 		// Set the current display date to the main data
 		data.setDay(dCurrentDisplay);
 		data.setMonth(mCurrentDisplay);
@@ -102,6 +104,10 @@ public class DisplayMonthActivity extends Activity {
 				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_LONG).show();
 				Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
+				data.setDay(Integer.parseInt(data.convertRawDate(currentSelectedDate)[0]));
+				data.setMonth(Arrays.asList(months).indexOf(
+						data.convertRawDate(currentSelectedDate)[2]));
+				data.setYear(Integer.parseInt(data.convertRawDate(currentSelectedDate)[3]));
 				intent.putExtra(CURRENT_SELECTED_DATE, data.convertDate(currentSelectedDate, false));
 				startActivity(intent);
 			}
@@ -181,6 +187,7 @@ public class DisplayMonthActivity extends Activity {
 				return swipeDetector.onTouchEvent(event);
 			}
 		});
+		
 		// Set event for each cell of grid view
 		monthView.setOnItemClickListener(new OnItemClickListener() {
 
